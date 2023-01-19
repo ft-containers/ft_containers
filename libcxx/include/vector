@@ -202,6 +202,7 @@ __vector_base_common<__b>::__throw_out_of_range() const
     _VSTD::__throw_out_of_range("vector");
 }
 
+
 _LIBCPP_EXTERN_TEMPLATE(class _LIBCPP_EXTERN_TEMPLATE_TYPE_VIS __vector_base_common<true>)
 
 template <class _Tp, class _Allocator>
