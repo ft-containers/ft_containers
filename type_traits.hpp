@@ -126,6 +126,7 @@ namespace ft
 								is_same<typename is_iterator<Iter>::category,
 											random_access_iterator_tag>::value> {};
 
+	// is_output_iterator
 	template <typename Iter>
 	struct is_output_iterator
 		: public integral_constant<bool,

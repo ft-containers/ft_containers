@@ -7,7 +7,7 @@
 
 namespace ft
 {
-	/*---------------------vector_base_common class---------------------*/
+	// vector_base_common class
 	template <bool>
 	class vector_base_common
 	{
@@ -25,7 +25,7 @@ namespace ft
 	void vector_base_common<b>::throw_out_of_range() const
 	{ std::__throw_out_of_range("vector"); }
 
-	/*---------------------vector_base class--------------------------*/
+	// vector_base class
 	template <class Tp, class Allocator>
 	class vector_base
 		: protected vector_base_common<true>
@@ -49,7 +49,7 @@ namespace ft
 		// __vector_base(const allocator_type& __a);
 	};
 
-	/*-------------------------vector class----------------------------*/
+	// vector class
 	template <typename Tp, typename Allocator = std::allocator<Tp> >
 	class vector
 		: private vector_base<Tp, Allocator>
