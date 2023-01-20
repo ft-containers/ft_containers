@@ -3,6 +3,7 @@
 
 #include <memory>
 #include "iterator_traits.hpp"
+#include "iterator.hpp" // 나중에 vector_iterator 옮기고 지우기
 
 namespace ft
 {
@@ -49,13 +50,13 @@ namespace ft
 	};
 
 	/*-------------------------vector class----------------------------*/
-	template <typename Tp, typename Allocator /* = allocator<_Tp> */>
+	template <typename Tp, typename Allocator = std::allocator<Tp> >
 	class vector
 		: private vector_base<Tp, Allocator>
 	{
 	private:
 		typedef vector_base<Tp, Allocator>				base;
-		typedef allocator<Tp>							default_allocator_type;
+		typedef Allocator<Tp>							default_allocator_type; //원래 소문자 allocator였음,, 문제 생기면 확인하기
 	public:
 		typedef vector									self;
 		typedef Tp										value_type;
@@ -67,8 +68,8 @@ namespace ft
 		typedef typename base::difference_type			difference_type;
 		typedef typename base::pointer					pointer;
 		typedef typename base::const_pointer			const_pointer;
-		typedef wrap_iter<pointer>						iterator;
-		typedef wrap_iter<const_pointer>				const_iterator;
+		typedef vector_iterator<pointer>				iterator;
+		typedef vector_iterator<const_pointer>			const_iterator;
 		typedef ft::reverse_iterator<iterator>			reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 	};
