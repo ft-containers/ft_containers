@@ -50,7 +50,7 @@ namespace ft
 
 		// constructor
 		template <class _Tp, class _Allocator>
-		vector_base() throw() (is_nothrow_default_constructible<allocator_type>::value)
+		vector_base() throw()
 			: _begin(NULL), _end(NULL), _end_cap(NULL) {}
 
 		template <class _Tp, class _Allocator>
@@ -110,6 +110,39 @@ namespace ft
 		typedef vector_iterator<const_pointer>			const_iterator;
 		// typedef ft::reverse_iterator<iterator>			reverse_iterator;
 		// typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
+
+		// constructor
+		vector() throw() {}
+		explicit vector(const allocator_type& a) throw() : base(a) {} //explicit
+		explicit vector(size_type n);
+			//explicit 98버전이 맞는지? 형 안 맞는것 넣었을 때 오류 발생하는 키워드
+		vector(size_type n, const value_type& x);
+		vector(size_type n, const value_type& x, const allocator_type& a);
+
+		template <class InputIterator> // vector 403줄
+		vector(InputIterator first,
+				typename enable_if<(ft::is_input_iterator<InputIterator>::value &&
+									!(ft::is_forward_iterator<InputIterator>::value)), InputIterator
+									>::type last); // is_constructible ?
+		template <class InputIterator>
+		vector(InputIterator first, InputIterator last, const allocator_type& a,
+				typename enable_if<(ft::is_input_iterator<InputIterator>::value &&
+									!ft::is_forward_iterator<InputIterator>::value)
+									>::type* = 0);
+		template <class ForwardIterator>
+		vector(ForwardIterator first,
+				typename enable_if<(ft::is_forward_iterator<ForwardIterator>::value>::value), ForwardIterator
+									>::type last);
+		template <class ForwardIterator>
+		vector(ForwardIterator first, ForwardIterator last, const allocator_type& a,
+				typename enable_if<(ft::is_forward_iterator<ForwardIterator>::value)>::type* = 0);
+
+		// vector(const vector& x) {}
+		// vector(const vector& x, const allocator_type& a) {}
+		// vector& operator=(const vector& x);
+			// clear, assign, size 등 이런 친구들 만들고 하기?
+
+		// 1/26 위의 생성자 선언한 것 구현하기! 필요한 함수 그때그때.
 
 		// Iterators
 		iterator begin() throw()
