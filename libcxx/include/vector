@@ -225,7 +225,7 @@ protected:
 
     pointer                                         __begin_;
     pointer                                         __end_;
-    __compressed_pair<pointer, allocator_type> __end_cap_;
+    __compressed_pair<pointer, allocator_type>      __end_cap_; 
 
     _LIBCPP_INLINE_VISIBILITY
     allocator_type& __alloc() _NOEXCEPT

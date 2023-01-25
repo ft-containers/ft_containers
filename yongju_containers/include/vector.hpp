@@ -38,7 +38,7 @@ struct __vector_base {
 
  protected:
   typedef _T value_type;
-  typedef typename allocator_type::reference reference;
+  typedef typename allocator_type::reference reference; 
   typedef typename allocator_type::const_reference const_reference;
   typedef typename allocator_type::size_type size_type;
   typedef typename allocator_type::difference_type difference_type;
@@ -55,7 +55,8 @@ struct __vector_base {
   __vector_base(size_type n);
   __vector_base(size_type n, const allocator_type& alloc);
   ~__vector_base() FT_NOEXCEPT {
-    if (__begin_) __a_.deallocate(__begin_, __capacity());
+    if (__begin_) 
+    __a_.deallocate(__begin_, __capacity());
   }
 
   size_type __capacity() const FT_NOEXCEPT {
@@ -297,7 +298,7 @@ class vector : private __vector_base<_T, _Allocator> {
   typedef _Allocator allocator_type;
   typedef typename __base::reference reference;
   typedef typename __base::const_reference const_reference;
-  typedef typename __base::size_type size_type;
+  typedef typename __base::size_type size_type; 
   typedef typename __base::difference_type difference_type;
   typedef typename __base::pointer pointer;
   typedef typename __base::const_pointer const_pointer;

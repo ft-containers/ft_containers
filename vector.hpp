@@ -3,7 +3,7 @@
 
 #include <memory>
 #include "iterator_traits.hpp"
-#include "iterator.hpp" // 나중에 vector_iterator 옮기고 지우기
+#include "vector_iterator.hpp" // 나중에 vector_iterator 옮기고 지우기
 
 namespace ft
 {
@@ -26,27 +26,66 @@ namespace ft
 	{ std::__throw_out_of_range("vector"); }
 
 	// vector_base class
-	template <class Tp, class Allocator>
+	template <class Tp, class Allocator = std::allocator<Tp>()>
 	class vector_base
 		: protected vector_base_common<true>
 	{
 	public:
 		typedef Allocator								allocator_type;
-		typedef std::allocator_traits<allocator_type>	alloc_traits;
-		typedef typename std::alloc_traits::size_type	size_type;
 	protected:
-		typedef Tp										value_type;
-		typedef value_type&								reference;
-		typedef const value_type&						const_reference;
-		typedef typename alloc_traits::difference_type	difference_type;
-		typedef typename alloc_traits::pointer			pointer;
-		typedef typename alloc_traits::const_pointer	const_pointer;
-		typedef pointer									iterator;
-		typedef const_pointer							const_iterator;
+		typedef Tp											value_type;
+		typedef typename allocator_type::reference 			reference;
+		typedef typename allocator_type::const_reference 	const_reference;
+		typedef typename allocator_type::size_type 			size_type;
+		typedef typename allocator_type::difference_type	difference_type;
+		typedef typename allocator_type::pointer			pointer;
+		typedef typename allocator_type::const_pointer		const_pointer;
+		typedef pointer										iterator;
+		typedef const_pointer								const_iterator;
 
-		// 나중에 다시 확인
-		// __vector_base() _NOEXCEPT_(is_nothrow_default_constructible<allocator_type>::value);
-		// __vector_base(const allocator_type& __a);
+		iterator		_begin;
+		iterator		_end;
+		iterator		_end_cap;
+		allocator_type	_a;
+
+		// constructor
+		template <class _Tp, class _Allocator>
+		vector_base() throw() (is_nothrow_default_constructible<allocator_type>::value)
+			: _begin(NULL), _end(NULL), _end_cap(NULL) {}
+
+		template <class _Tp, class _Allocator>
+		vector_base(const allocator_type& a)
+			: _begin(NULL), _end_(NULL), _end_cap(NULL, a) {}
+
+		// destructor
+		template <class _Tp, class _Allocator>
+		~vector_base()
+		{
+			if (_begin != NULL)
+			{
+				clear();
+				_a.deallocate(_begin, _capacity());
+			}
+		}
+
+		/* size_type 받는 생성자 from yongju
+		template <typename _T, typename _Allocator>
+		__vector_base<_T, _Allocator>::__vector_base(size_type __n)
+			: __a_(std::allocator<_T>()) {
+		__begin_ = __construct_storage(__n);
+		__end_ = __begin_;
+		__end_cap_ = __begin_ + __n;
+		}
+
+		template <typename _T, typename _Allocator>
+		__vector_base<_T, _Allocator>::__vector_base(size_type __n,
+													const allocator_type& a)
+			: __a_(a) {
+		__begin_ = __construct_storage(__n);
+		__end_ = __begin_;
+		__end_cap_ = __begin_ + __n;
+		}
+		*/
 	};
 
 	// vector class
@@ -56,7 +95,6 @@ namespace ft
 	{
 	private:
 		typedef vector_base<Tp, Allocator>				base;
-		typedef Allocator<Tp>							default_allocator_type; //원래 소문자 allocator였음,, 문제 생기면 확인하기
 	public:
 		typedef vector									self;
 		typedef Tp										value_type;
@@ -70,8 +108,27 @@ namespace ft
 		typedef typename base::const_pointer			const_pointer;
 		typedef vector_iterator<pointer>				iterator;
 		typedef vector_iterator<const_pointer>			const_iterator;
-		typedef ft::reverse_iterator<iterator>			reverse_iterator;
-		typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
+		// typedef ft::reverse_iterator<iterator>			reverse_iterator;
+		// typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
+
+		// Iterators
+		iterator begin() throw()
+		{ return this->begin; }
+		const_iterator begin() const
+		{ return this->begin; }
+		iterator end()
+		{ return this->end; }
+		const_iterator end() const
+		{ return this->end; }
+		reverse_iterator rbegin()
+		{ return reverse_iterator(end()); }
+		const_reverse_iterator rbegin() const 
+		{ return const_reverse_iterator(end()); }
+		reverse_iterator rend() 
+		{ return reverse_iterator(begin()); }
+		const_reverse_iterator rend() const 
+		{ return const_reverse_iterator(begin()); }
+		
 	};
 }
 
