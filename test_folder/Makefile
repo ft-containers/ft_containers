@@ -4,7 +4,7 @@ CXX = c++
 # CXXFLAGS = -Wall -Wextra -Werror -g3
 # -std=c++98 -pedantic
 
-SRCS = main.cpp 
+SRCS = test_vector.cpp 
 #		enable_if.cpp 
 		
 
