@@ -2,6 +2,7 @@
 #define VECTOR_HPP
 
 #include <memory>
+#include "utility.hpp"
 #include "iterator_traits.hpp"
 #include "vector_iterator.hpp" // 나중에 vector_iterator 옮기고 지우기
 
@@ -43,17 +44,18 @@ namespace ft
 		typedef pointer										iterator;
 		typedef const_pointer								const_iterator;
 
-		iterator		_begin;
-		iterator		_end;
-		iterator		_end_cap;
-		allocator_type	_a;
+		// 함수와 변수를 구분하기 위하여 맨 뒤에 언더바맨.
+		iterator						begin_;
+		iterator						end_;
+		pair<iterator, allocator_type>	end_cap_;
+		allocator_type					a_;
 
 		// constructor
 		vector_base() throw()
-			: _begin(NULL), _end(NULL), _end_cap(NULL) {}
+			: begin_(NULL), end_(NULL), end_cap_(NULL) {}
 
 		vector_base(const allocator_type& a)
-			: _begin(NULL), _end(NULL), _end_cap(NULL, a) {}
+			: begin_(NULL), end_(NULL), end_cap_(NULL, a) {}
 
 		// destructor
 		// ~vector_base()
@@ -65,14 +67,14 @@ namespace ft
 		// 	}
 		// }
 
-		allocator_type& __alloc() throw()
-			{return _end_cap.second();}
-		const allocator_type& __alloc() const throw()
-			{return _end_cap.second();}
-		pointer& __end_cap() throw()
-			{return _end_cap.first();}
-		const pointer& __end_cap() const throw()
-			{return _end_cap.first();}
+		allocator_type& alloc() throw()
+			{return end_cap_.second();}
+		const allocator_type& alloc() const throw()
+			{return end_cap_.second();}
+		pointer& end_cap() throw()
+			{return end_cap_.first();}
+		const pointer& end_cap() const throw()
+			{return end_cap_.first();}
 	};
 
 	// vector class
@@ -131,13 +133,13 @@ namespace ft
 
 		// Iterators
 		iterator begin() throw()
-		{ return this->begin; }
+		{ return this->begin_; }
 		const_iterator begin() const
-		{ return this->begin; }
+		{ return this->begin_; }
 		iterator end()
-		{ return this->end; }
+		{ return this->end_; }
 		const_iterator end() const
-		{ return this->end; }
+		{ return this->end_; }
 		// reverse_iterator rbegin()
 		// { return reverse_iterator(end()); }
 		// const_reverse_iterator rbegin() const 
@@ -147,6 +149,25 @@ namespace ft
 		// const_reverse_iterator rend() const 
 		// { return const_reverse_iterator(begin()); }
 		void	vallocate(size_type __n);
+		void	construct_at_end(size_type n);
+
+	private : //서브젝트 요구사항! (public에 있을 이유 없음)
+		struct ConstructTransaction
+		{
+			vector				&v_;
+			pointer				pos_;
+			const_pointer const	new_end_;
+
+			// constructor
+			explicit ConstructTransaction(vector &v, size_type n)
+				: v_(v),  pos_(v.end_), new_end_(v.end_ + n) {}
+			// destructor
+			~ConstructTransaction() { v_.end_ = pos_; }
+
+			// private:
+			// 	ConstructTransaction(ConstructTransaction const&) = delete; //아예 사용도 못하게
+			// 	ConstructTransaction& operator=(ConstructTransaction const&) = delete;
+		};
 	};
 
 	// constructor
@@ -156,7 +177,7 @@ namespace ft
 		if (n > 0)
 		{
 			vallocate(n);
-			__construct_at_end(n);
+			construct_at_end(n);
 		}
 	}
 
@@ -166,10 +187,26 @@ namespace ft
 	{
 		if (n > max_size())
 			this->throw_length_error();
-		this->__begin_ = this->__end_ = allocator_type::allocate(this->__alloc(), n);
-		this->__end_cap() = this->__begin_ + n;
-		__annotate_new(0);
+		this->begin_ = this->end_ = allocator_type::allocate(this->alloc(), n);
+		this->end_cap() = this->begin_ + n;
 	}
-};
+
+
+	//  Default constructs __n objects starting at __end_
+	//  throws if construction throws
+	//  Precondition:  __n > 0
+	//  Precondition:  size() + __n <= capacity() //캐퍼서티 범위내에서만 동작하는 함수
+	//  Postcondition:  size() == size() + __n
+	template <class Tp, class Allocator>
+	void
+	vector<Tp, Allocator>::construct_at_end(size_type n)
+	{
+		ConstructTransaction tx(*this, n);
+		for (; tx.pos_ != tx.new_end_; ++tx.pos_) {
+		allocator_type::construct(this->alloc(), std::__to_raw_pointer(tx.pos_));
+		}
+	}
+
+}
 
 #endif
