@@ -2,6 +2,8 @@
 #define VECTOR_HPP
 
 #include <memory>
+#include <limits>
+#include <algorithm>
 #include "utility.hpp"
 #include "iterator_traits.hpp"
 #include "vector_iterator.hpp" // 나중에 vector_iterator 옮기고 지우기
@@ -45,14 +47,13 @@ namespace ft
 		typedef const_pointer								const_iterator;
 
 		// 함수와 변수를 구분하기 위하여 맨 뒤에 언더바맨.
-		iterator						begin_;
-		iterator						end_;
-		pair<iterator, allocator_type>	end_cap_;
-		allocator_type					a_;
+		iterator											begin_;
+		iterator											end_;
+		pair<iterator, allocator_type>						end_cap_;
 
-		// constructor
+		// constructor 
 		vector_base() throw()
-			: begin_(NULL), end_(NULL), end_cap_(NULL) {}
+			: begin_(NULL), end_(NULL), end_cap_(NULL, std::allocator<Tp>()) {}
 
 		vector_base(const allocator_type& a)
 			: begin_(NULL), end_(NULL), end_cap_(NULL, a) {}
@@ -103,7 +104,6 @@ namespace ft
 		vector() throw() {}
 		explicit vector(const allocator_type& a) throw() : base(a) {} //explicit
 
-			//explicit 98버전이 맞는지? 형 안 맞는것 넣었을 때 오류 발생하는 키워드
 		explicit vector(size_type n);
 		vector(size_type n, const value_type& x);
 		vector(size_type n, const value_type& x, const allocator_type& a);
@@ -150,6 +150,10 @@ namespace ft
 		// { return const_reverse_iterator(begin()); }
 		void	vallocate(size_type __n);
 		void	construct_at_end(size_type n);
+		void	construct_at_end(size_type n, const_reference x);
+
+    	size_type max_size() const throw();
+
 
 	private : //서브젝트 요구사항! (public에 있을 이유 없음)
 		struct ConstructTransaction
@@ -181,9 +185,58 @@ namespace ft
 		}
 	}
 
-	template <class _Tp, class _Allocator>
+	template <class Tp, class Allocator>
+	vector<Tp, Allocator>::vector(size_type n, const value_type& x)
+	{
+		if (n > 0)
+		{
+			vallocate(n);
+			construct_at_end(n, x);
+		}
+	}
+
+	template <class Tp, class Allocator>
+	vector<Tp, Allocator>::vector(size_type n, const value_type& x, const allocator_type& a)
+		: base(a)
+	{
+		if (n > 0)
+		{
+			vallocate(n);
+			construct_at_end(n, x);
+		}
+	}
+
+	// template <class Tp, class Allocator>
+	// template <class InputIterator>
+	// vector<Tp, Allocator>::vector(InputIterator first,
+	// 			typename enable_if<(ft::is_input_iterator<InputIterator>::value &&
+	// 								!(ft::is_forward_iterator<InputIterator>::value)), InputIterator
+	// 								>::type last)
+	// {
+	// 	for (; first != last; ++first)
+	// 		__emplace_back(first);
+	// }
+
+	/* max_size */
+	template <class Tp, class Allocator>
+	typename vector<Tp, Allocator>::size_type
+	vector<Tp, Allocator>::max_size() const throw()
+	{
+		return std::min<size_type>(allocator_type::max_size(this->alloc()),
+									std::numeric_limits<difference_type>::max());
+	}
+	
+		//  Allocate space for __n objects
+		//  throws length_error if __n > max_size()
+		//  throws (probably bad_alloc) if memory run out
+		//  Precondition:  __begin_ == __end_ == __end_cap() == 0
+		//  Precondition:  __n > 0
+		//  Postcondition:  capacity() == __n
+		//  Postcondition:  size() == 0
+		
+	template <class Tp, class Allocator>
 	void
-	vector<_Tp, _Allocator>::vallocate(size_type n)
+	vector<Tp, Allocator>::vallocate(size_type n)
 	{
 		if (n > max_size())
 			this->throw_length_error();
@@ -191,21 +244,30 @@ namespace ft
 		this->end_cap() = this->begin_ + n;
 	}
 
+		//  Default constructs __n objects starting at __end_
+		//  throws if construction throws
+		//  Precondition:  __n > 0
+		//  Precondition:  size() + __n <= capacity() //캐퍼서티 범위내에서만 동작하는 함수
+		//  Postcondition:  size() == size() + __n
 
-	//  Default constructs __n objects starting at __end_
-	//  throws if construction throws
-	//  Precondition:  __n > 0
-	//  Precondition:  size() + __n <= capacity() //캐퍼서티 범위내에서만 동작하는 함수
-	//  Postcondition:  size() == size() + __n
-	template <class Tp, class Allocator>
-	void
-	vector<Tp, Allocator>::construct_at_end(size_type n)
-	{
-		ConstructTransaction tx(*this, n);
-		for (; tx.pos_ != tx.new_end_; ++tx.pos_) {
-		allocator_type::construct(this->alloc(), std::__to_raw_pointer(tx.pos_));
-		}
-	}
+//main 문 돌려보느라 주석해놓은 구현된 코드!!!----------------------------------------
+	// template <class Tp, class Allocator>
+	// void
+	// vector<Tp, Allocator>::construct_at_end(size_type n)
+	// {
+	// 	ConstructTransaction tx(*this, n);
+	// 	for (; tx.pos_ != tx.new_end_; ++tx.pos_)
+	// 		allocator_type::construct(this->alloc(), std::__to_raw_pointer(tx.pos_));
+	// }
+
+	// template <class Tp, class Allocator>
+	// void
+	// vector<Tp, Allocator>::construct_at_end(size_type n, const_reference x)
+	// {
+	// 	ConstructTransaction tx(*this, n);
+	// 	for (; tx.pos_ != tx.new_end_; ++tx.pos_)
+	// 		allocator_type::construct(this->alloc(), std::__to_raw_pointer(tx.pos_), x);
+	// }
 
 }
 
