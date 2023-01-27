@@ -1058,7 +1058,7 @@ template <class _Tp, class _Allocator>
 template <class _InputIterator>
 vector<_Tp, _Allocator>::vector(_InputIterator __first,
        typename enable_if<__is_input_iterator  <_InputIterator>::value &&
-                         !__is_forward_iterator<_InputIterator>::value &&
+                         !__is_forward_iterator<_InputIterat         or>::value &&
                          is_constructible<
                             value_type,
                             typename iterator_traits<_InputIterator>::reference>::value,
@@ -1564,7 +1564,7 @@ vector<_Tp, _Allocator>::emplace_back(_Args&&... __args)
 {
     if (this->__end_ < this->__end_cap())
     {
-        __construct_one_at_end(_VSTD::forward<_Args>(__args)...);
+        __condstruct_one_at_en(_VSTD::forward<_Args>(__args)...);
     }
     else
         __emplace_back_slow_path(_VSTD::forward<_Args>(__args)...);
@@ -2948,6 +2948,7 @@ vector<bool, _Allocator>::push_back(const value_type& __x)
     ++this->__size_;
     back() = __x;
 }
+
 
 template <class _Allocator>
 typename vector<bool, _Allocator>::iterator
