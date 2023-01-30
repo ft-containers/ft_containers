@@ -1564,7 +1564,7 @@ vector<_Tp, _Allocator>::emplace_back(_Args&&... __args)
 {
     if (this->__end_ < this->__end_cap())
     {
-        __condstruct_one_at_en(_VSTD::forward<_Args>(__args)...);
+        __construct_one_at_end(_VSTD::forward<_Args>(__args)...);
     }
     else
         __emplace_back_slow_path(_VSTD::forward<_Args>(__args)...);
