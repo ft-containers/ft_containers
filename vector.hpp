@@ -4,6 +4,7 @@
 #include <memory>
 #include <limits>
 #include <algorithm>
+#include <string>
 #include "utility.hpp"
 #include "iterator_traits.hpp"
 #include "vector_iterator.hpp" // 나중에 vector_iterator 옮기고 지우기
@@ -78,17 +79,17 @@ namespace ft
 		void destruct_at_end(pointer new_last) throw(); // 나중에 필요할 때 
 
 		allocator_type&			alloc() throw()
-		{return end_cap_.second();}
+		{ return end_cap_.second; }
 		const allocator_type&	alloc() const throw()
-		{return end_cap_.second();}
+		{ return end_cap_.second; }
 		pointer&				end_cap() throw()
-		{return end_cap_.first();}
+		{ return end_cap_.first; }
 		const pointer&			end_cap() const throw()
-		{return end_cap_.first();}
+		{ return end_cap_.first; }
 
 		size_type check_length(size_type n)
 		{
-			if (n > a_.max_size())
+			if (n > alloc().max_size())
 				throw_length_error();
 			return n;
 		}
@@ -96,8 +97,8 @@ namespace ft
 		void copy_data(vector_base const& other) throw();
 
 		void copy_data(
-			pointer const& new_begin_, pointer const& new_end,
-			pointer const& new_end_cap_) throw();
+			iterator const& new_begin_, iterator const& new_end,
+			pair<iterator, Allocator> const& new_end_cap_) throw();
 	};
 	
 	// vector class
@@ -297,7 +298,7 @@ namespace ft
 	vector<Tp, Allocator>::vector(InputIterator first, InputIterator last, const allocator_type& a,
 									typename enable_if<(ft::is_input_iterator<InputIterator>::value &&
 									!ft::is_forward_iterator<InputIterator>::value)
-									>::type* = 0)
+									>::type*)
 		: base(a)
 	{
 		for (; first != last; ++first)
@@ -310,7 +311,7 @@ namespace ft
 									typename enable_if<(ft::is_forward_iterator<ForwardIterator>::value), ForwardIterator
 									>::type last)
 	{
-		size_type n = static_cast<size_type>(std::distance(first, last));
+		size_type n = static_cast<size_type>(ft::distance(first, last));
 		if (n > 0)
 		{
 			vallocate(n);
@@ -321,10 +322,10 @@ namespace ft
 	template <class Tp, class Allocator>
 	template <class ForwardIterator>
 	vector<Tp, Allocator>::vector(ForwardIterator first, ForwardIterator last, const allocator_type& a,
-									typename enable_if<(ft::is_forward_iterator<ForwardIterator>::value)>::type* = 0)
+									typename enable_if<(ft::is_forward_iterator<ForwardIterator>::value)>::type*)
 		: base(a)
 	{
-		size_type n = static_cast<size_type>(std::distance(first, last));
+		size_type n = static_cast<size_type>(ft::distance(first, last));
 		if (n > 0)
 		{
 			vallocate(n);
@@ -335,9 +336,9 @@ namespace ft
 	/* max_size */
 	template <class Tp, class Allocator>
 	typename vector<Tp, Allocator>::size_type
-	vector<Tp, Allocator>::max_size() const throw()
+		vector<Tp, Allocator>::max_size() const
 	{
-		return std::min<size_type>(allocator_type::max_size(this->alloc()),
+		return std::min<size_type>(this->alloc().max_size(),
 									std::numeric_limits<difference_type>::max());
 	}
 
@@ -349,12 +350,11 @@ namespace ft
 		//  Postcondition:  capacity() == __n
 		//  Postcondition:  size() == 0
 	template <class Tp, class Allocator>
-	void
-	vector<Tp, Allocator>::vallocate(size_type n)
+	void vector<Tp, Allocator>::vallocate(size_type n)
 	{
 		if (n > max_size())
 			this->throw_length_error();
-		this->begin_ = this->end_ = allocator_type::allocate(this->alloc(), n);
+		this->begin_ = this->end_ = this->alloc().allocate(n);
 		this->end_cap() = this->begin_ + n;
 	}
 
@@ -363,31 +363,45 @@ namespace ft
 		//  Precondition:  __n > 0
 		//  Precondition:  size() + __n <= capacity() //캐퍼서티 범위내에서만 동작하는 함수
 		//  Postcondition:  size() == size() + __n
-	template <class Tp, class Allocator>
-	void
-	vector<Tp, Allocator>::construct_at_end(size_type n)
-	{
-		ConstructTransaction tx(*this, n);
-		for (; tx.pos_ != tx.new_end_; ++tx.pos_)
-			allocator_type::construct(this->alloc(), std::__to_raw_pointer(tx.pos_));
-	}
+
+	//----------------------------------------------
+	// template <class _Tp>
+	// _Tp* __to_raw_pointer(_Tp* __p) _NOEXCEPT
+	// { return __p; }
+
+	// #if _LIBCPP_STD_VER <= 17
+	// template <class _Pointer>
+	// typename pointer_traits<_Pointer>::element_type*
+	// __to_raw_pointer(_Pointer __p) _NOEXCEPT
+	// {
+	// 	return _VSTD::__to_raw_pointer(__p.operator->());
+	// }
+	//-------------------------------------------------------
 
 	template <class Tp, class Allocator>
-	void
-	vector<Tp, Allocator>::construct_at_end(size_type n, const_reference x)
+	void vector<Tp, Allocator>::construct_at_end(size_type n)
 	{
 		ConstructTransaction tx(*this, n);
 		for (; tx.pos_ != tx.new_end_; ++tx.pos_)
-			allocator_type::construct(this->alloc(), std::__to_raw_pointer(tx.pos_), x);
+			this->alloc().construct(tx.pos_);
+			//alloc().construct(this->alloc(), std::__to_raw_pointer(tx.pos_));
+	}
+	template <class Tp, class Allocator>
+	void vector<Tp, Allocator>::construct_at_end(size_type n, const_reference x)
+	{
+		ConstructTransaction tx(*this, n);
+		for (; tx.pos_ != tx.new_end_; ++tx.pos_)
+			this->alloc().construct(tx.pos_, x);
+			// alloc().construct( std::__to_raw_pointer(tx.pos_), x);
 	}
 
 	template <class Tp, class Allocator>
 	template <class ForwardIterator>
 	typename enable_if<is_forward_iterator<ForwardIterator>::value, void>::type
-	vector<Tp, Allocator>::construct_at_end(ForwardIterator first, ForwardIterator last, size_type n)
+		vector<Tp, Allocator>::construct_at_end(ForwardIterator first, ForwardIterator last, size_type n)
 	{
 		ConstructTransaction tx(*this, n);
-		allocator_type::construct_range_forward(this->alloc(), first, last, tx.pos_);
+		std::__construct_range_forward(this->alloc(), first, last, tx.pos_);
 	}
 
 	// push_back
@@ -401,8 +415,8 @@ namespace ft
 
 	template <typename T, typename Allocator>
 	void vector_base<T, Allocator>::copy_data(
-		pointer const& new_begin_, pointer const& new_end,
-		pointer const& new_end_cap_) throw()
+		iterator const& new_begin_, iterator const& new_end,
+		pair<iterator, Allocator> const& new_end_cap_) throw()
 	{
 		begin_ = new_begin_;
 		end_ = new_end;
@@ -446,7 +460,7 @@ namespace ft
 	void vector<T, Allocator>::reconstruct_push_back(const value_type& val)
 	{
 		size_type cap = this->capacity();
-		size_type max_size = max_size();
+		size_type max_size = this->max_size();
 		size_type new_size = cap > (max_size >> 1) ? max_size : cap << 1;
 		if (new_size == 0)
 			new_size = 1;
@@ -458,7 +472,7 @@ namespace ft
 	template <typename T, typename Allocator>
 	void vector<T, Allocator>::push_back(const value_type& val) 
 	{
-		if (this->end_ != this->end_cap_)
+		if (this->end_ != this->end_cap())
 			this->alloc().construct(this->end_++, val);
 		else
 			reconstruct_push_back(val);
