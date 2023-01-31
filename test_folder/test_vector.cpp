@@ -7,7 +7,7 @@ int	main() {
 	// default constructor
 	{
 		ft::vector<int> vec_test;
-		std::vector<int> vec_test2;\
+		std::vector<int> vec_test2;
 	}
 
 	// size_type constructor
