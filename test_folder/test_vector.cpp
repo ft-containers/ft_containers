@@ -35,7 +35,23 @@ int	main() {
 		ft::vector<int> vec_test2(begin, end);
 		std::cout << vec_test2.front() << std::endl;
 		std::cout << vec_test2.back() << std::endl;
-
 	}
+
+	// capacity
+	{
+		ft::vector<int> vec_test;
+		vec_test.push_back(4);
+		vec_test.push_back(44);
+		std::cout << "size : " << vec_test.size() << std::endl;
+		std::cout << "max_size : " << vec_test.max_size() << std::endl;
+		vec_test.resize(1);
+		std::cout << "capacity : " << vec_test.capacity() << std::endl;
+		std::cout << "empty : " << vec_test.empty() << std::endl;
+		vec_test.reserve(10);
+		std::cout << "after 10 reserve : " << vec_test.capacity() << std::endl;
+		vec_test.reserve(8);
+		std::cout << "after 8 reserve : " << vec_test.capacity() << std::endl;
+	}
+	
 	return 0;
 }
