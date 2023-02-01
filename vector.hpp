@@ -9,6 +9,9 @@
 #include "iterator_traits.hpp"
 #include "vector_iterator.hpp" // 나중에 vector_iterator 옮기고 지우기
 
+
+#include <iostream>
+
 namespace ft
 {
 	// vector_base_common class
@@ -148,14 +151,9 @@ namespace ft
 		template <typename ForwardIterator>
 		vector(ForwardIterator first, ForwardIterator last, const allocator_type& a,
 				typename enable_if<(ft::is_forward_iterator<ForwardIterator>::value)>::type* = 0);
-
-		// vector(const vector& x) {}
-		// vector(const vector& x, const allocator_type& a) {}
-		// vector& operator=(const vector& x);
-			// clear, assign, size 등 이런 친구들 만들고 하기?
-
-		// func
-		
+		// = operator
+		vector(const vector& other);
+		vector& operator=(const vector& other); 
 
 		// Iterators
 		iterator begin() throw()
@@ -212,7 +210,7 @@ namespace ft
 		const_reference back() const
 		{ return *(this->end_ - 1); }
 
-		//	Modifiers done!!!!!!
+		//	Modifiers
 		template <typename InputIterator>
 			typename enable_if<is_input_iterator <InputIterator>::value && !is_forward_iterator<InputIterator>::value, void>::type
 			assign(InputIterator first, InputIterator last);
@@ -224,15 +222,15 @@ namespace ft
 		void	push_back(const value_type& val);
 		void	pop_back();
 
-		iterator	insert(pointer position, const value_type& val);
-		void		insert(pointer position, size_type n, const value_type& val);
+		iterator	insert(iterator position, const value_type& val);
+		void		insert(iterator position, size_type n, const value_type& val);
 		template <typename InputIterator>
 			typename enable_if <is_input_iterator <InputIterator>::value 
 				&& !is_forward_iterator<InputIterator>::value , void>::type
-			insert(pointer position, InputIterator first, InputIterator last);
+			insert(iterator position, InputIterator first, InputIterator last);
 		template <typename ForwardIterator>
 			typename enable_if <is_forward_iterator<ForwardIterator>::value, void>::type
-			insert(pointer position, ForwardIterator first, ForwardIterator last);
+			insert(iterator position, ForwardIterator first, ForwardIterator last);
 
 		iterator erase(iterator position);
 		iterator erase(iterator first, iterator last);
@@ -261,10 +259,6 @@ namespace ft
 
 		// private function for resize
 		void	__destroy_from_end(pointer new_end);
-
-		// insert
-		void	__move_range(pointer from_s, pointer from_e, pointer to);
-
 
 		// vector객체와 size_type n을 받아서 생성
 		// 크기를 늘릴 준비를 해준다
@@ -367,6 +361,35 @@ namespace ft
 			__vallocate(n);
 			__construct_at_end(first, last, n);
 		}
+	}
+
+	// Copy Constructor
+	template <typename Tp, typename Allocator>
+	vector<Tp, Allocator>::vector(const vector<Tp, Allocator>& other)
+		: base(other.alloc())
+	{
+		this->__vallocate(other.size());
+		this->end_ = std::uninitialized_copy(other.begin_, other.end_, this->begin_);
+	}
+
+	// operator=
+	template <typename Tp, typename Allocator>
+	vector<Tp, Allocator>& vector<Tp, Allocator>::operator=(
+		const vector<Tp, Allocator>& other)
+	{
+		if (this != &other)
+		{
+			if (this->alloc() != other.alloc())
+			{
+				clear();
+				this->alloc().deallocate(this->begin_, capacity());
+				this->begin_ = this->end_ = NULL;
+				// this->begin_ = this->end_ = this->end_cap() = NULL;
+				this->alloc() = other.alloc();
+			}
+			assign(other.begin(), other.end());
+		}
+		return *this;
 	}
 
 	/* max_size */
@@ -517,15 +540,15 @@ namespace ft
 	{
 		if (this->empty())
 			return ;
-		this->__destruct_at_end(this->end_ - 1);
+		this->__destroy_from_end(this->end_ - 1);
 	}
 
 	template <typename Tp, typename Allocator>
 	typename vector<Tp, Allocator>::iterator
-		vector<Tp, Allocator>::insert(pointer position, const value_type& val) 
+		vector<Tp, Allocator>::insert(iterator position, const value_type& val) 
 	{
 		difference_type diff = position - begin();
-		if (this->end_ == this->end_cap_)
+		if (this->end_ == this->end_cap())
 			reserve(size_type(capacity() + 1));
 		pointer p = this->begin_ + diff;
 		pointer old_end = this->end_;
@@ -541,7 +564,7 @@ namespace ft
 	}
 
 	template <typename Tp, typename Allocator>
-	void vector<Tp, Allocator>::insert(pointer position, size_type n,
+	void vector<Tp, Allocator>::insert(iterator position, size_type n,
 										const value_type& val)
 	{
 		difference_type diff = position - begin();
@@ -562,7 +585,7 @@ namespace ft
 	template <typename InputIterator>
 	typename enable_if <is_input_iterator <InputIterator>::value 
 		&& !is_forward_iterator<InputIterator>::value, void>::type
-	vector<Tp, Allocator>::insert(pointer position, InputIterator first, InputIterator last)
+	vector<Tp, Allocator>::insert(iterator position, InputIterator first, InputIterator last)
 	{
 		difference_type diff = position - begin();
 		pointer p = this->begin_ + diff;
@@ -574,7 +597,7 @@ namespace ft
 	template <typename Tp, typename Allocator>
 	template <typename ForwardIterator>
 	typename enable_if <is_forward_iterator<ForwardIterator>::value, void>::type
-	vector<Tp, Allocator>::insert(pointer position, ForwardIterator first, ForwardIterator last)
+	vector<Tp, Allocator>::insert(iterator position, ForwardIterator first, ForwardIterator last)
 	{
 		difference_type in_size = ft::distance(first, last);
 		difference_type diff = position - begin();
@@ -600,7 +623,7 @@ namespace ft
 	vector<Tp, Allocator>::erase(iterator position)
 	{
 		difference_type diff = position - begin();
-		iterator p = this->begin_ + diff;
+		pointer p = this->begin_ + diff;
 		this->alloc().destroy(p);
 		this->alloc().destroy(std::uninitialized_copy(p + 1, (this->end_)--, p));
 		return (iterator(this->begin_ + diff));
@@ -611,7 +634,7 @@ namespace ft
 	vector<Tp, Allocator>::erase(iterator first, iterator last)
 	{
 		difference_type diff = first - begin();
-		iterator p = this->begin_ + diff;
+		pointer p = this->begin_ + diff;
 
 		if (last == end())
 		{
@@ -620,8 +643,8 @@ namespace ft
 		}
 
 		difference_type range = last - first;
-		iterator p_last = p + range;
-		iterator new_end = this->end_ - range;
+		pointer p_last = p + range;
+		pointer new_end = this->end_ - range;
 
 		for (difference_type i = 0; i <= range; ++i)
 		{

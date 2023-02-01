@@ -53,5 +53,7 @@ int	main() {
 		std::cout << "after 8 reserve : " << vec_test.capacity() << std::endl;
 	}
 	
+
+	
 	return 0;
 }
