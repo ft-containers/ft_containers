@@ -23,57 +23,21 @@ namespace ft
 		vector_iterator(const vector_iterator<Up>& u,
 			typename ft::enable_if<ft::is_random_access_iterator<Up>::value>::type* = 0) throw()
 			: i(u.base()) {}
-		vector_iterator(iterator_type x) throw() : i(x) {}
+		vector_iterator(iterator_type x) : i(x) {}
 
-		reference operator*() const throw()
-		{ return *i; }
-		pointer operator->() const throw()
-		{ return i; }
-		vector_iterator& operator++() throw()
-		{
-			++i;
-			return *this;
-		}
-		vector_iterator operator++(int) throw()
-		{
-			vector_iterator tmp(*this);
-			++(*this);
-			return tmp;
-		}
-		vector_iterator& operator--() throw()
-		{
-			--i;
-			return *this;
-		}
-		vector_iterator operator--(int) throw()
-		{ 
-			vector_iterator tmp(*this); 
-			--(*this); 
-			return tmp;
-		}
-		vector_iterator operator+(difference_type n) const throw()
-		{
-			vector_iterator w(*this);
-			w += n;
-			return w;
-		}
-		vector_iterator& operator+=(difference_type n) throw()
-		{
-			i += n;
-			return *this;
-		}
-		vector_iterator operator-(difference_type n) const throw()
-		{ return (*this + (-n)); }
-		vector_iterator& operator-=(difference_type n) throw()
-		{
-			*this += -n;
-			return *this;
-		}
-		reference operator[](difference_type n) const throw()
-		{ return i[n]; }
+		iterator_type		 base() const { return i; }
 
-		iterator_type base() const throw() 
-		{ return i; }
+		reference			operator* () const { return *i; }
+		pointer				operator->() const { return i; }
+		vector_iterator&	operator++() { ++i; return *this; }
+		vector_iterator		operator++(int) { vector_iterator tmp(*this); ++(*this); return tmp; }
+		vector_iterator&	operator--() { --i; return *this; }
+		vector_iterator		operator--(int) { vector_iterator tmp(*this); --(*this); return tmp; }
+		vector_iterator		operator+ (difference_type n) const { vector_iterator w(*this); w += n; return w; }
+		vector_iterator&	operator+=(difference_type n) { i += n; return *this; }
+		vector_iterator		operator- (difference_type n) const { return (*this + (-n)); }
+		vector_iterator&	operator-=(difference_type n) { *this += -n; return *this; }
+		reference			operator[](difference_type n) const { return i[n]; }
 	};
 
 	template <class Iter1, class Iter2>
@@ -126,10 +90,7 @@ namespace ft
 	vector_iterator<Iter>
 	operator+(typename vector_iterator<Iter>::difference_type n,
 			vector_iterator<Iter> x) throw()
-	{
-		x += n;
-		return x;
-	}
+	{ x += n; return x; }
 };
 
 #endif

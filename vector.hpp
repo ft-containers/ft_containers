@@ -7,10 +7,9 @@
 #include <string>
 #include "utility.hpp"
 #include "iterator_traits.hpp"
-#include "vector_iterator.hpp" // 나중에 vector_iterator 옮기고 지우기
+#include "vector_iterator.hpp"
+#include "vector_reverse_iterator.hpp"
 #include "algorithm.hpp"
-
-#include <iostream>
 
 namespace ft
 {
@@ -64,23 +63,23 @@ namespace ft
 			: begin_(NULL), end_(NULL), end_cap_(NULL, a) {}
 
 		// destructor
-		// ~vector_base()
-		// {
-		// 	if (_begin != NULL)
-		// 	{
-		// 		clear();
-		// 		_a.deallocate(_begin, _capacity());
-		// 	}
-		// }
+		~vector_base()
+		{
+			if (begin_ != NULL)
+			{
+				clear();
+				this->alloc().deallocate(begin_, capacity());
+			}
+		}
 
 		void	__swap_data(vector_base& other) throw();
+	
+		void 	__destroy_from_end(pointer new_end);
 
 		void clear() throw()
-		{ destruct_at_end(begin_); }
+		{ __destroy_from_end(begin_); }
 		size_type capacity() const throw()
 		{ return static_cast<size_type>(end_cap() - begin_); }
-		void destruct_at_end(pointer new_last) throw(); // 나중에 필요할 때 
-
 		allocator_type&			alloc() throw()
 		{ return end_cap_.second; }
 		const allocator_type&	alloc() const throw()
@@ -123,8 +122,8 @@ namespace ft
 		typedef typename base::const_pointer			const_pointer;
 		typedef vector_iterator<pointer>				iterator;
 		typedef vector_iterator<const_pointer>			const_iterator;
-		//typedef ft::reverse_iterator<iterator>		reverse_iterator;
-		//typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
+		typedef ft::reverse_iterator<iterator>			reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 	
 
 		// constructor
@@ -165,14 +164,14 @@ namespace ft
 		{ return this->end_; }
 		const_iterator end() const
 		{ return this->end_; }
-		// reverse_iterator rbegin()
-		// { return reverse_iterator(end()); }
-		// const_reverse_iterator rbegin() const 
-		// { return const_reverse_iterator(end()); }
-		// reverse_iterator rend() 
-		// { return reverse_iterator(begin()); }
-		// const_reverse_iterator rend() const 
-		// { return const_reverse_iterator(begin()); }
+		reverse_iterator rbegin()
+		{ return reverse_iterator(end()); }
+		const_reverse_iterator rbegin() const 
+		{ return const_reverse_iterator(end()); }
+		reverse_iterator rend() 
+		{ return reverse_iterator(begin()); }
+		const_reverse_iterator rend() const 
+		{ return const_reverse_iterator(begin()); }
 		
 		// Capacity -> 서브젝트 요구사항 다 만듬
 		size_type	size() const
@@ -242,22 +241,10 @@ namespace ft
 			if (this->begin_) 
 				__destroy_from_end(this->begin_);
 		}
-		
-		// allocator = >(hatch war dda)
+
 		allocator_type get_allocator() const
 		{ return (this->alloc()); }
 		
-		// equal = >(hatch war dda)
-
-		// reverse iterator
-
-		// rbegin
-		
-		// rend
-
-
-
-	
 	//서브젝트 요구사항! (public에 있을 이유 없음)
 	private : 
 		void	__vallocate(size_type __n);
@@ -273,8 +260,7 @@ namespace ft
 		void	__reallocate(size_type n);
 		void	__reconstruct_push_back(const value_type& val);
 
-		// private function for resize
-		void	__destroy_from_end(pointer new_end);
+		
 
 		// vector객체와 size_type n을 받아서 생성
 		// 크기를 늘릴 준비를 해준다
@@ -434,7 +420,7 @@ namespace ft
 	}
 
 	template <typename Tp, typename Allocator>
-	void vector<Tp, Allocator>::__destroy_from_end(pointer new_end)
+	void vector_base<Tp, Allocator>::__destroy_from_end(pointer new_end)
 	{
 		pointer current_end = this->end_;
 		while(new_end != current_end)
@@ -725,10 +711,14 @@ namespace ft
 			__reconstruct_push_back(val);
 	}
 
+	//swap
+	template <class Tp, class Allocator>
+	void swap (vector<Tp, Allocator>& x, vector<Tp, Allocator>& y)
+	{ x.swap(y); }
 
 };
-// non_member func && swap
-// clang
+
+// non_member func 
 template <class Tp, class Allocator>
 bool operator== (const ft::vector<Tp, Allocator>& x, const ft::vector<Tp, Allocator>& y)
 {
