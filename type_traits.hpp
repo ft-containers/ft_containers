@@ -65,7 +65,7 @@ namespace ft
 	template <typename T>
 	struct is_same<T, T> : public true_type {};
 
-	// void_t : template인 이유는 인자를 받을수 있는지만 보기위하여 template클래스로 정의됨. //좋아요수 2
+	// void_t : template인 이유는 인자를 받을수 있는지만 보기위하여 template클래스로 정의됨. //좋아요수 3
 	// 			1. 88번 줄의 템플릿 특수화된 함수를 검사한다.
 	//			2. void_t<typename ...>을 검사하는데 typename이 존재한다면 한줄씩 넘어간다.
 	//			3. 그런데 존재하지않는다면 88번의 함수를 호출한다.
@@ -101,7 +101,7 @@ namespace ft
 	};
 
 	// is_iterator
-	template <typename Iter, bool = has_iterator_typedefs<iterator_traits<Iter> >::value>
+	template <typename Iter, bool = has_iterator_typedefs<Iter>::value>
 	struct is_iterator : public false_type
 	{ typedef void category; };
 

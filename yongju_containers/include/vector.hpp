@@ -688,7 +688,7 @@ typename vector<_T, _Allocator>::iterator vector<_T, _Allocator>::erase(
   pointer __p = this->__begin_ + __diff;
 
   this->__a_.destroy(__p);
-  this->__a_.destroy(std::uninitialized_copy(__p + 1, this->__end_--, __p));
+  this->__a_.destroy(std::uninitialized_copy(__p + 1, (this->__end_)--, __p));
   return (iterator(this->__begin_ + __diff));
 }
 

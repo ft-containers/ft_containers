@@ -7,7 +7,7 @@ int	main() {
 	// default constructor
 	{
 		ft::vector<int> vec_test;
-		std::vector<int> vec_test2;\
+		std::vector<int> vec_test2;
 	}
 
 	// size_type constructor
@@ -52,6 +52,8 @@ int	main() {
 		vec_test.reserve(8);
 		std::cout << "after 8 reserve : " << vec_test.capacity() << std::endl;
 	}
+	
+
 	
 	return 0;
 }
