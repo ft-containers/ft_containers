@@ -243,9 +243,11 @@ namespace ft
 				__destroy_from_end(this->begin_);
 		}
 		
-		// allocator
+		// allocator = >(hatch war dda)
 		allocator_type get_allocator() const
 		{ return (this->alloc()); }
+		
+		// equal = >(hatch war dda)
 
 		// reverse iterator
 
@@ -253,7 +255,6 @@ namespace ft
 		
 		// rend
 
-		// equal
 
 
 	
