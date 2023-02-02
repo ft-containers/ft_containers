@@ -8,7 +8,7 @@
 #include "utility.hpp"
 #include "iterator_traits.hpp"
 #include "vector_iterator.hpp" // 나중에 vector_iterator 옮기고 지우기
-
+#include "algorithm.hpp"
 
 #include <iostream>
 
@@ -126,6 +126,11 @@ namespace ft
 		//typedef ft::reverse_iterator<iterator>		reverse_iterator;
 		//typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 
+
+		// friend
+		// friend bool operator<(const vector<Tp,Allocator>& x, const vector<Tp,Allocator>& y);
+	
+
 		// constructor
 		vector() throw() {}
 		explicit vector(const allocator_type& a) throw() : base(a) {} //explicit
@@ -241,7 +246,21 @@ namespace ft
 			if (this->begin_) 
 				__destroy_from_end(this->begin_);
 		}
+		
+		// allocator
+		allocator_type get_allocator() const
+		{ return (this->alloc()); }
 
+		// reverse iterator
+
+		// rbegin
+		
+		// rend
+
+		// equal
+
+
+	
 	//서브젝트 요구사항! (public에 있을 이유 없음)
 	private : 
 		void	__vallocate(size_type __n);
@@ -709,6 +728,35 @@ namespace ft
 			__reconstruct_push_back(val);
 	}
 
+
 };
+	// non_member func && swap
+	// clang
+	template <class Tp, class Allocator>
+	bool operator==(const ft::vector<Tp, Allocator>& x, const ft::vector<Tp, Allocator>& y)
+	{
+		const typename ft::vector<Tp, Allocator>::size_type sz = x.size();
+		return (sz == y.size() && ft::equal(x.begin(), x.end(), y.begin()));
+	}
+	template <class Tp, class Allocator>
+	bool operator!= (const ft::vector<Tp,Allocator>& x, const ft::vector<Tp,Allocator>& y)
+	{ return !(x == y); }
+
+	template <class Tp, class Allocator>
+	bool operator<  (const ft::vector<Tp,Allocator>& x, const ft::vector<Tp,Allocator>& y)
+	// { return std::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end()); }
+	{ return std::lexicographical_compare(x.begin_, x.end_, y.begin_, y.end_); }
+	
+	template <class Tp, class Allocator>
+	bool operator<= (const ft::vector<Tp,Allocator>& x, const ft::vector<Tp,Allocator>& y)
+	{ return !(y < x); }
+	
+	template <class Tp, class Allocator>
+	bool operator>  (const ft::vector<Tp,Allocator>& x, const ft::vector<Tp,Allocator>& y)
+	{ return (y < x); }
+	
+	template <class Tp, class Allocator>
+	bool operator>= (const ft::vector<Tp,Allocator>& x, const ft::vector<Tp,Allocator>& y)
+	{ return !(x < y); }
 
 #endif
