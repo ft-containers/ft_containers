@@ -124,7 +124,7 @@ namespace ft
 		typedef vector_iterator<const_pointer>			const_iterator;
 		typedef ft::reverse_iterator<iterator>			reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
-	
+
 
 		// constructor
 		vector() throw() {}
@@ -144,10 +144,20 @@ namespace ft
 				typename enable_if<(ft::is_input_iterator<InputIterator>::value &&
 									!ft::is_forward_iterator<InputIterator>::value)
 									>::type* = 0);
+		
 		template <typename ForwardIterator>
 		vector(ForwardIterator first,
 				typename enable_if<(ft::is_forward_iterator<ForwardIterator>::value), ForwardIterator
 									>::type last);
+
+		//     template <class ForwardIterator>
+        // vector(ForwardIterator first,
+        //        typename enable_if<is_forward_iterator<ForwardIterator>::value &&
+        //                          std::is_constructible<
+        //                             value_type,
+        //                             typename iterator_traits<ForwardIterator>::reference>::value,
+        //                          ForwardIterator>::type last);
+
 		template <typename ForwardIterator>
 		vector(ForwardIterator first, ForwardIterator last, const allocator_type& a,
 				typename enable_if<(ft::is_forward_iterator<ForwardIterator>::value)>::type* = 0);
@@ -239,7 +249,7 @@ namespace ft
 		void clear()
 		{
 			if (this->begin_) 
-				__destroy_from_end(this->begin_);
+				this->__destroy_from_end(this->begin_);
 		}
 
 		allocator_type get_allocator() const
@@ -336,12 +346,19 @@ namespace ft
 		for (; first != last; ++first)
 			push_back(*first);
 	}
-
+	
 	template <class Tp, class Allocator>
 	template <class ForwardIterator>
+
 	vector<Tp, Allocator>::vector(ForwardIterator first,
 									typename enable_if<(ft::is_forward_iterator<ForwardIterator>::value), ForwardIterator
 									>::type last)
+	// vector<Tp, Allocator>::vector(ForwardIterator first,
+    //            typename enable_if<is_forward_iterator<ForwardIterator>::value &&
+    //                              std::is_constructible<
+    //                                 value_type,
+    //                                 typename iterator_traits<ForwardIterator>::reference>::value,
+    //                              ForwardIterator>::type last)
 	{
 		size_type n = static_cast<size_type>(ft::distance(first, last));
 		if (n > 0)
@@ -437,12 +454,12 @@ namespace ft
 		size_type prev_size = size();
 		if (n < prev_size)
 		{
-			__destroy_from_end(this->begin_ + n);
+			this->__destroy_from_end(this->begin_ + n);
 			return ;
 		}
 		else if (n > capacity())
 		{
-			__reallocate(n);
+			this->__reallocate(n);
 		}
 		insert(end(), n - prev_size, val);
 	}
@@ -640,7 +657,7 @@ namespace ft
 
 		if (last == end())
 		{
-			__destroy_from_end(p);
+			this->__destroy_from_end(p);
 			return iterator(this->begin_ + diff);
 		}
 
@@ -654,7 +671,7 @@ namespace ft
 			if (i <= this->end_ - p_last)
 				this->alloc().construct(p + i, *(p_last + i));
 		}
-		__destroy_from_end(new_end);
+		this->__destroy_from_end(new_end);
 		return (iterator(this->begin_ + diff));
 	}
 

@@ -15,13 +15,14 @@ namespace ft
 		typedef typename iterator_traits<iterator_type>::difference_type	difference_type;
 		typedef typename iterator_traits<iterator_type>::pointer			pointer;
 		typedef typename iterator_traits<iterator_type>::reference			reference;
+		// typedef typename iterator_traits<iterator_type>::const_pointer		const_pointer;
 	private:
 		iterator_type i;
 	public:
 		vector_iterator() throw() {}
 		template <class Up>
 		vector_iterator(const vector_iterator<Up>& u,
-			typename ft::enable_if<ft::is_random_access_iterator<Up>::value>::type* = 0) throw()
+			typename ft::enable_if<ft::is_convertible<Up, iterator_type>::value>::type* = 0) throw()
 			: i(u.base()) {}
 		vector_iterator(iterator_type x) : i(x) {}
 

@@ -17,6 +17,7 @@ namespace ft
 	template <typename Tp, Tp v>
 	struct integral_constant
 	{
+		// typedef integral_constant<Tp, v>	type;
 		static const Tp	value = v;
 		typedef Tp	value_type;
 		typedef integral_constant	type;
@@ -24,6 +25,39 @@ namespace ft
 		operator value_type() const throw() { return value; }
 	};
 
+	// is_convertible
+	template <typename From, typename To>
+	struct __is_convertible_helper 
+	{
+	private:
+		typedef char (&yes)[1];
+		typedef char (&no)[2];
+		static yes check(To);
+		static no check(...);
+	public:
+		enum { value = sizeof(check(static_cast<From>(0))) == sizeof(yes) };
+	};
+
+	template <typename From, typename To>
+	struct is_convertible
+		: public ft::integral_constant<bool, __is_convertible_helper<From, To>::value> {};
+
+	//is_constructible
+	// template <typename T, typename Arg>
+	// struct is_constructible_helper {
+	// private:
+	// 	template <typename U>
+	// 	static char check(U(*)[1]);
+	// 	static char check(...);
+	// 	static T makeT();
+	// public:
+	// 	enum { value = sizeof(check(makeT())) == sizeof(char) };
+	// };
+
+	// template <typename T, typename Arg>
+	// struct is_constructible : public std::integral_constant<bool, is_constructible_helper<T, Arg>::value> {};
+
+	//integral_constant
 	typedef integral_constant<bool, true> true_type;
 	typedef integral_constant<bool, false> false_type;
 
