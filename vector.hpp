@@ -10,7 +10,7 @@
 #include "vector_iterator.hpp"
 #include "vector_reverse_iterator.hpp"
 #include "algorithm.hpp"
-
+#include <iterator>
 namespace ft
 {
 	// vector_base_common class
@@ -136,31 +136,25 @@ namespace ft
 
 		template <typename InputIterator> // vector 403줄
 		vector(InputIterator first,
-				typename enable_if<(ft::is_input_iterator<InputIterator>::value &&
-									!(ft::is_forward_iterator<InputIterator>::value)), InputIterator
-									>::type last); // is_constructible ?
+				typename enable_if<(is_input_iterator<InputIterator>::value &&
+									!(is_forward_iterator<InputIterator>::value)), InputIterator
+									>::type last);
+
 		template <typename InputIterator>
 		vector(InputIterator first, InputIterator last, const allocator_type& a,
-				typename enable_if<(ft::is_input_iterator<InputIterator>::value &&
-									!ft::is_forward_iterator<InputIterator>::value)
+				typename enable_if<(is_input_iterator<InputIterator>::value &&
+									!is_forward_iterator<InputIterator>::value)
 									>::type* = 0);
 		
 		template <typename ForwardIterator>
 		vector(ForwardIterator first,
-				typename enable_if<(ft::is_forward_iterator<ForwardIterator>::value), ForwardIterator
+				typename enable_if<(is_forward_iterator<ForwardIterator>::value), ForwardIterator
 									>::type last);
-
-		//     template <class ForwardIterator>
-        // vector(ForwardIterator first,
-        //        typename enable_if<is_forward_iterator<ForwardIterator>::value &&
-        //                          std::is_constructible<
-        //                             value_type,
-        //                             typename iterator_traits<ForwardIterator>::reference>::value,
-        //                          ForwardIterator>::type last);
 
 		template <typename ForwardIterator>
 		vector(ForwardIterator first, ForwardIterator last, const allocator_type& a,
-				typename enable_if<(ft::is_forward_iterator<ForwardIterator>::value)>::type* = 0);
+				typename enable_if<(is_forward_iterator<ForwardIterator>::value)>::type* = 0);
+		
 		// = operator
 		vector(const vector& other);
 		vector& operator=(const vector& other); 
@@ -327,8 +321,8 @@ namespace ft
 	template <class Tp, class Allocator>
 	template <class InputIterator>
 	vector<Tp, Allocator>::vector(InputIterator first,
-									typename enable_if<(ft::is_input_iterator<InputIterator>::value &&
-									!(ft::is_forward_iterator<InputIterator>::value)), InputIterator
+									typename enable_if<(is_input_iterator<InputIterator>::value &&
+									!(is_forward_iterator<InputIterator>::value)), InputIterator
 									>::type last)
 	{
 		for (; first != last; ++first)
@@ -338,8 +332,8 @@ namespace ft
 	template <class Tp, class Allocator>
 	template <class InputIterator>
 	vector<Tp, Allocator>::vector(InputIterator first, InputIterator last, const allocator_type& a,
-									typename enable_if<(ft::is_input_iterator<InputIterator>::value &&
-									!ft::is_forward_iterator<InputIterator>::value)
+									typename enable_if<(is_input_iterator<InputIterator>::value &&
+									!is_forward_iterator<InputIterator>::value)
 									>::type*)
 		: base(a)
 	{
@@ -351,14 +345,8 @@ namespace ft
 	template <class ForwardIterator>
 
 	vector<Tp, Allocator>::vector(ForwardIterator first,
-									typename enable_if<(ft::is_forward_iterator<ForwardIterator>::value), ForwardIterator
+									typename enable_if<(is_forward_iterator<ForwardIterator>::value), ForwardIterator
 									>::type last)
-	// vector<Tp, Allocator>::vector(ForwardIterator first,
-    //            typename enable_if<is_forward_iterator<ForwardIterator>::value &&
-    //                              std::is_constructible<
-    //                                 value_type,
-    //                                 typename iterator_traits<ForwardIterator>::reference>::value,
-    //                              ForwardIterator>::type last)
 	{
 		size_type n = static_cast<size_type>(ft::distance(first, last));
 		if (n > 0)
@@ -371,7 +359,7 @@ namespace ft
 	template <class Tp, class Allocator>
 	template <class ForwardIterator>
 	vector<Tp, Allocator>::vector(ForwardIterator first, ForwardIterator last, const allocator_type& a,
-									typename enable_if<(ft::is_forward_iterator<ForwardIterator>::value)>::type*)
+									typename enable_if<(is_forward_iterator<ForwardIterator>::value)>::type*)
 		: base(a)
 	{
 		size_type n = static_cast<size_type>(ft::distance(first, last));
