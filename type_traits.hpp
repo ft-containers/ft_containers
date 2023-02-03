@@ -42,6 +42,20 @@ namespace ft
 	struct is_convertible
 		: public ft::integral_constant<bool, __is_convertible_helper<From, To>::value> {};
 
+	//is_constructible new version
+	template <typename T, typename Arg>
+	struct is_constructible_helper {
+	private:
+	static char check(T);
+	static char (&check(...))[2];
+	public:
+	enum { value = sizeof(check(T())) == sizeof(char) };
+	};
+
+	template <typename T, typename Arg>
+	struct is_constructible 
+		: public std::integral_constant<bool, is_constructible_helper<T, Arg>::value> {};
+
 	//is_constructible
 	// template <typename T, typename Arg>
 	// struct is_constructible_helper {
