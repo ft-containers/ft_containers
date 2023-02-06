@@ -89,23 +89,33 @@ namespace ft
 	T &operator()(T &__x) const { return __x; }
 	const T &operator()(const T &__x) const { return __x; }
 	};
-
-	template <typename InputIterator>
-	typename iterator_traits<InputIterator>::difference_type distance(
-		InputIterator first, InputIterator last, typename enable_if<(ft::is_input_iterator<InputIterator>::value &&
-									!ft::is_forward_iterator<InputIterator>::value)
-									>::type* = 0) 
+	
+	// clang
+	template <typename InputIter>
+	typename iterator_traits<InputIter>::difference_type
+	__distance(InputIter first, InputIter __last, input_iterator_tag)
 	{
-		typename iterator_traits<InputIterator>::difference_type d(0);
-		for (; first != last; ++first) ++d;
-		return d;
+		typename iterator_traits<InputIter>::difference_type i(0);
+		for (; first != __last; ++first)
+			++i;
+		return i;
 	}
 
-	template <typename RandIterator>
-	typename iterator_traits<RandIterator>::difference_type distance(
-		RandIterator first, RandIterator last, typename enable_if<(ft::is_random_access_iterator<RandIterator>::value)
-									>::type* = 0)
-	{ return last - first; } 
+	template <typename RandIter>
+	typename iterator_traits<RandIter>::difference_type
+	__distance(RandIter first, RandIter last, random_access_iterator_tag)
+	{
+		return last - first;
+	}
+
+	// 템플릿으로 하지않고 오버로딩으로 구현한 이유는, 랜덤엑세스이터레이터태그가 인풋이터레이터태그도 갖고있기때문에?인듯하다
+	template <typename InputIter>
+	typename iterator_traits<InputIter>::difference_type
+	distance(InputIter first, InputIter last)
+	{
+		return ft::__distance(first, last, typename iterator_traits<InputIter>::iterator_category());
+	}
+
 };
 
 #endif
