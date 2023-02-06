@@ -556,7 +556,11 @@ namespace ft
 	{
 		difference_type diff = position - begin();
 		if (this->end_ == this->end_cap())
-			reserve(size_type(capacity() + 1));
+		{
+			if (empty())
+				reserve(size_type(1));
+			reserve(size_type(capacity() * 2));
+		}
 		pointer p = this->begin_ + diff;
 		pointer old_end = this->end_;
 		while (old_end != p)
@@ -575,7 +579,16 @@ namespace ft
 										const value_type& val)
 	{
 		difference_type diff = position - begin();
-		if (size() + n > capacity()) reserve(size() + n);
+		if (size() + n > capacity())
+		{
+			if (empty())
+				reserve(size_type(1));
+			else
+			{
+				while (size() + n <= capacity())
+					reserve(size_type(capacity() * 2));
+			}
+		}
 		pointer p = this->begin_ + diff;
 		pointer old_end = this->end_;
 		while (old_end != p)
@@ -610,10 +623,18 @@ namespace ft
 		difference_type diff = position - begin();
 		if (in_size <= 0) 
 			return ;
-		if (in_size + size() > capacity()) 
-			reserve(in_size + size());
-		iterator p = this->begin_ + diff;
-		iterator old_end = this->end_;
+		if (in_size + size() > capacity())
+		{
+			if (empty())
+				reserve(size_type(1));
+			else
+			{
+				while (in_size + size() <= capacity())
+					reserve(size_type(capacity() * 2));
+			}
+		}
+		pointer p = this->begin_ + diff;
+		pointer old_end = this->end_;
 		while (old_end != p) 
 		{
 			--old_end;

@@ -25,23 +25,18 @@ namespace ft
 		operator value_type() const throw() { return value; }
 	};
 
-	// is_convertible
-	template <typename From, typename To>
-	struct __is_convertible_helper 
-	{
-	private:
-		typedef char (&yes)[1];
-		typedef char (&no)[2];
-		static yes check(To);
-		static no check(...);
-	public:
-		enum { value = sizeof(check(static_cast<From>(0))) == sizeof(yes) };
-	};
-
 	template <typename From, typename To>
 	struct is_convertible
-		: public ft::integral_constant<bool, __is_convertible_helper<From, To>::value> {};
+	{
+		private:
+		static char test(To);
+		static char (&test(...))[2];
 
+		public:
+		enum { value = sizeof(test(From())) == sizeof(char) };
+	};
+
+//----------------------------------
 	//is_constructible
 	// template <typename T, typename Arg>
 	// struct is_constructible_helper {

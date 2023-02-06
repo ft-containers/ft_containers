@@ -28,7 +28,7 @@ namespace ft
 
 		//Member functions
 		reference			operator* () const { Iter tmp = current; return *--tmp; }
-		pointer				operator->() const { Iter tmp = current; return (--tmp); }
+		pointer				operator->() const { Iter tmp = current; return &(*(--tmp)); }
 		reverse_iterator&	operator++() { --current; return *this; }
 		reverse_iterator	operator++(int) { reverse_iterator tmp(*this); --current; return tmp; }
 		reverse_iterator&	operator--() { ++current; return *this; }
