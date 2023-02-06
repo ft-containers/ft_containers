@@ -559,7 +559,8 @@ namespace ft
 		{
 			if (empty())
 				reserve(size_type(1));
-			reserve(size_type(capacity() * 2));
+			else
+				reserve(size_type(capacity() * 2));
 		}
 		pointer p = this->begin_ + diff;
 		pointer old_end = this->end_;

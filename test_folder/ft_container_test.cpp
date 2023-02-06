@@ -38,9 +38,11 @@ int main()
             s = v.size();
             std::cout << s << std::endl;
             ft_s = ft_v.size();
-            std::cout << (int)(*(&ft_s)) << std::endl;
+            std::cout << ft_s << std::endl;
             c = v.capacity();
+            std::cout << c << std::endl;
             ft_c = ft_v.capacity();
+            std::cout << ft_c << std::endl;
             for (size_t i = 0; i < v.size(); ++i)
                 str += v[i];
             for (size_t i = 0; i < ft_v.size(); ++i)
