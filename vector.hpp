@@ -446,9 +446,7 @@ namespace ft
 			return ;
 		}
 		else if (n > capacity())
-		{
-			this->__reallocate(n);
-		}
+			this->__reallocate(2 * capacity());
 		insert(end(), n - prev_size, val);
 	}
 
