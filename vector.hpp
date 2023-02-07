@@ -583,12 +583,11 @@ namespace ft
 		if (size() + n > capacity())
 		{
 			if (empty())
-				reserve(size_type(1));
+				reserve(size_type(n));
+			else if	(size() + n < capacity() * 2)
+				reserve(capacity() * 2);
 			else
-			{
-				while (size() + n <= capacity())
-					reserve(size_type(capacity() * 2));
-			}
+				reserve(size() + n);
 		}
 		pointer p = this->begin_ + diff;
 		pointer old_end = this->end_;
@@ -627,12 +626,11 @@ namespace ft
 		if (in_size + size() > capacity())
 		{
 			if (empty())
-				reserve(size_type(1));
+				reserve(size_type(in_size));
+			else if	(size() + in_size < capacity() * 2)
+				reserve(capacity() * 2);
 			else
-			{
-				while (in_size + size() <= capacity())
-					reserve(size_type(capacity() * 2));
-			}
+				reserve(size() + in_size);
 		}
 		pointer p = this->begin_ + diff;
 		pointer old_end = this->end_;
@@ -697,7 +695,7 @@ namespace ft
 		this->__copy_data(other);
 		other.__copy_data(tmp_begin_, tmp_end_, tmp_end_cap_);
 	}
-	
+
 	// 4. 이미 있던 벡터의 원소(데이터)를 새 벡터에 복사
 	template <typename Tp, typename Allocator>
 	void vector<Tp, Allocator>::__reallocate(size_type n)
