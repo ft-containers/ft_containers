@@ -13,6 +13,9 @@
 
 #include "algorithm.hpp"
 #include "iterator.hpp"
+#include <limits>
+#include <algorithm>
+#include <numeric>
 
 #ifndef VECTOR_HPP
 #define VECTOR_HPP

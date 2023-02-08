@@ -127,12 +127,27 @@ namespace ft
 
 
 		// constructor
-		vector() throw() {}
-		explicit vector(const allocator_type& a) throw() : base(a) {} //explicit
+			//clang
+			vector() _NOEXCEPT_(is_nothrow_default_constructible<allocator_type>::value)
+			{
+			#if _LIBCPP_DEBUG_LEVEL >= 2
+						__get_db()->__insert_c(this);
+			#endif
+					}
+				_LIBCPP_INLINE_VISIBILITY explicit vector(const allocator_type& __a)
+			#if _LIBCPP_STD_VER <= 14
+					_NOEXCEPT_(is_nothrow_copy_constructible<allocator_type>::value)
+			#else
+					_NOEXCEPT
+			#endif
+			: __base(__a)
 
-		explicit vector(size_type n);
-		vector(size_type n, const value_type& x);
-		vector(size_type n, const value_type& x, const allocator_type& a);
+			vector() throw() {}
+			explicit vector(const allocator_type& a) throw() : base(a) {} //explicit
+
+			explicit vector(size_type n);
+			vector(size_type n, const value_type& x);
+			vector(size_type n, const value_type& x, const allocator_type& a);
 
 		template <typename InputIterator> // vector 403줄
 		vector(InputIterator first,
