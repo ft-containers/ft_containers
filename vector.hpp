@@ -55,12 +55,10 @@ namespace ft
 		// end_cap_.first는 iterator, end_cap_.second는 allocator
 		pair<iterator, allocator_type>						end_cap_;
 
-		// constructor
+		// constructor 
 		vector_base() throw()
-			: begin_(NULL), end_(NULL), end_cap(NULL, std::allocator<Tp>()) {}
-			// : begin_(NULL), end_(NULL), end_cap(NULL, std::allocator<Tp>()) {}
-			// : begin_(NULL), end_(NULL), end_cap(NULL, Allocator()) {}
-		// allocatortype<Tp>()
+			: begin_(NULL), end_(NULL), end_cap_(NULL, std::allocator<Tp>()) {}
+
 		vector_base(const allocator_type& a)
 			: begin_(NULL), end_(NULL), end_cap_(NULL, a) {}
 
@@ -125,6 +123,7 @@ namespace ft
 		typedef vector_iterator<pointer>				iterator;
 		typedef vector_iterator<const_pointer>			const_iterator;
 		typedef ft::reverse_iterator<iterator>			reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 
 
 		// constructor
@@ -141,12 +140,28 @@ namespace ft
 			// #else
 			// 		_NOEXCEPT
 			// #endif
-			// : __base(__a)		template <typename InputIterator>
-		ector(InputItera {} first, InputIterator last, const allocator_type& a,
-			typename enable_if<(is_input_iterator<InputIterator>::value &&
+			// : __base(__a)
+
+		vector() throw() {}
+		explicit vector(const allocator_type& a) throw() : base(a) {} //explicit
+
+		explicit vector(size_type n);
+		vector(size_type n, const value_type& x);
+		vector(size_type n, const value_type& x, const allocator_type& a);
+
+		template <typename InputIterator> // vector 403줄
+		vector(InputIterator first,
+				typename enable_if<(is_input_iterator<InputIterator>::value &&
+									!(is_forward_iterator<InputIterator>::value)), InputIterator
+									>::type last);
+
+		template <typename InputIterator>
+		vector(InputIterator first, InputIterator last, const allocator_type& a,
+				typename enable_if<(is_input_iterator<InputIterator>::value &&
 									!is_forward_iterator<InputIterator>::value)
-								>::type* = 0);
-				emplate <typename ForwardIterator>
+									>::type* = 0);
+		
+		template <typename ForwardIterator>
 		vector(ForwardIterator first,
 				typename enable_if<(is_forward_iterator<ForwardIterator>::value), ForwardIterator
 									>::type last);
@@ -446,9 +461,7 @@ namespace ft
 			return ;
 		}
 		else if (n > capacity())
-		{
-			this->__reallocate(n);
-		}
+			this->__reallocate(2 * capacity());
 		insert(end(), n - prev_size, val);
 	}
 
@@ -556,7 +569,12 @@ namespace ft
 	{
 		difference_type diff = position - begin();
 		if (this->end_ == this->end_cap())
-			reserve(size_type(capacity() + 1));
+		{
+			if (empty())
+				reserve(size_type(1));
+			else
+				reserve(size_type(capacity() * 2));
+		}
 		pointer p = this->begin_ + diff;
 		pointer old_end = this->end_;
 		while (old_end != p)
@@ -575,7 +593,15 @@ namespace ft
 										const value_type& val)
 	{
 		difference_type diff = position - begin();
-		if (size() + n > capacity()) reserve(size() + n);
+		if (size() + n > capacity())
+		{
+			if (empty())
+				reserve(size_type(n));
+			else if	(size() + n < capacity() * 2)
+				reserve(capacity() * 2);
+			else
+				reserve(size() + n);
+		}
 		pointer p = this->begin_ + diff;
 		pointer old_end = this->end_;
 		while (old_end != p)
@@ -610,10 +636,17 @@ namespace ft
 		difference_type diff = position - begin();
 		if (in_size <= 0) 
 			return ;
-		if (in_size + size() > capacity()) 
-			reserve(in_size + size());
-		iterator p = this->begin_ + diff;
-		iterator old_end = this->end_;
+		if (in_size + size() > capacity())
+		{
+			if (empty())
+				reserve(size_type(in_size));
+			else if	(size() + in_size < capacity() * 2)
+				reserve(capacity() * 2);
+			else
+				reserve(size() + in_size);
+		}
+		pointer p = this->begin_ + diff;
+		pointer old_end = this->end_;
 		while (old_end != p) 
 		{
 			--old_end;
@@ -675,7 +708,7 @@ namespace ft
 		this->__copy_data(other);
 		other.__copy_data(tmp_begin_, tmp_end_, tmp_end_cap_);
 	}
-	
+
 	// 4. 이미 있던 벡터의 원소(데이터)를 새 벡터에 복사
 	template <typename Tp, typename Allocator>
 	void vector<Tp, Allocator>::__reallocate(size_type n)
