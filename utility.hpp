@@ -33,40 +33,40 @@ namespace ft
 		}
 	};
 
-	template <class _T1, class _T2>
-	bool operator==(const pair<_T1, _T2> &lhs, const pair<_T1, _T2> &rhs) {
+	template <class T1, class T2>
+	bool operator==(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs) {
 	return lhs.first == rhs.first && lhs.second == rhs.second;
 	}
 
-	template <class _T1, class _T2>
-	bool operator!=(const pair<_T1, _T2> &lhs, const pair<_T1, _T2> &rhs) {
+	template <class T1, class T2>
+	bool operator!=(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs) {
 	return !(lhs == rhs);
 	}
 
-	template <class _T1, class _T2>
-	bool operator<(const pair<_T1, _T2> &lhs, const pair<_T1, _T2> &rhs) {
+	template <class T1, class T2>
+	bool operator<(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs) {
 	return lhs.first < rhs.first ||
 			(!(rhs.first < lhs.first) && lhs.second < rhs.second);
 	}
 
-	template <class _T1, class _T2>
-	bool operator>(const pair<_T1, _T2> &lhs, const pair<_T1, _T2> &rhs) {
+	template <class T1, class T2>
+	bool operator>(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs) {
 	return rhs < lhs;
 	}
 
-	template <class _T1, class _T2>
-	bool operator>=(const pair<_T1, _T2> &lhs, const pair<_T1, _T2> &rhs) {
+	template <class T1, class T2>
+	bool operator>=(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs) {
 	return !(lhs < rhs);
 	}
 
-	template <class _T1, class _T2>
-	bool operator<=(const pair<_T1, _T2> &lhs, const pair<_T1, _T2> &rhs) {
+	template <class T1, class T2>
+	bool operator<=(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs) {
 	return !(rhs < lhs);
 	}
 
-	template <typename _T1, typename _T2>
-	inline pair<_T1, _T2> make_pair(_T1 x, _T2 y) {
-	return pair<_T1, _T2>(x, y);
+	template <typename T1, typename T2>
+	inline pair<T1, T2> make_pair(T1 x, T2 y) {
+	return pair<T1, T2>(x, y);
 	}
 
 	template <typename T>
@@ -78,25 +78,25 @@ namespace ft
 
 	template <typename pair>
 	struct select_first {
-	typename pair::first_type &operator()(pair &__x) const { return __x.first; }
-	const typename pair::first_type &operator()(const pair &__x) const {
-		return __x.first;
+	typename pair::first_type &operator()(pair &x) const { return x.first; }
+	const typename pair::first_type &operator()(const pair &x) const {
+		return x.first;
 	}
 	};
 
 	template <typename T>
 	struct identity {
-	T &operator()(T &__x) const { return __x; }
-	const T &operator()(const T &__x) const { return __x; }
+	T &operator()(T &x) const { return x; }
+	const T &operator()(const T &x) const { return x; }
 	};
 	
 	// clang
 	template <typename InputIter>
 	typename iterator_traits<InputIter>::difference_type
-	__distance(InputIter first, InputIter __last, input_iterator_tag)
+	__distance(InputIter first, InputIter last, input_iterator_tag)
 	{
 		typename iterator_traits<InputIter>::difference_type i(0);
-		for (; first != __last; ++first)
+		for (; first != last; ++first)
 			++i;
 		return i;
 	}
@@ -104,17 +104,13 @@ namespace ft
 	template <typename RandIter>
 	typename iterator_traits<RandIter>::difference_type
 	__distance(RandIter first, RandIter last, random_access_iterator_tag)
-	{
-		return last - first;
-	}
+	{ return last - first; }
 
 	// 템플릿으로 하지않고 오버로딩으로 구현한 이유는, 랜덤엑세스이터레이터태그가 인풋이터레이터태그도 갖고있기때문에?인듯하다
 	template <typename InputIter>
 	typename iterator_traits<InputIter>::difference_type
 	distance(InputIter first, InputIter last)
-	{
-		return ft::__distance(first, last, typename iterator_traits<InputIter>::iterator_category());
-	}
+	{ return ft::__distance(first, last, typename iterator_traits<InputIter>::iterator_category()); }
 
 };
 

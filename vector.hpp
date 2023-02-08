@@ -127,12 +127,27 @@ namespace ft
 
 
 		// constructor
-		vector() throw() {}
-		explicit vector(const allocator_type& a) throw() : base(a) {} //explicit
+			//clang
+			vector() _NOEXCEPT_(is_nothrow_default_constructible<allocator_type>::value)
+			{
+			#if _LIBCPP_DEBUG_LEVEL >= 2
+						__get_db()->__insert_c(this);
+			#endif
+					}
+				_LIBCPP_INLINE_VISIBILITY explicit vector(const allocator_type& __a)
+			#if _LIBCPP_STD_VER <= 14
+					_NOEXCEPT_(is_nothrow_copy_constructible<allocator_type>::value)
+			#else
+					_NOEXCEPT
+			#endif
+			: __base(__a)
 
-		explicit vector(size_type n);
-		vector(size_type n, const value_type& x);
-		vector(size_type n, const value_type& x, const allocator_type& a);
+			vector() throw() {}
+			explicit vector(const allocator_type& a) throw() : base(a) {} //explicit
+
+			explicit vector(size_type n);
+			vector(size_type n, const value_type& x);
+			vector(size_type n, const value_type& x, const allocator_type& a);
 
 		template <typename InputIterator> // vector 403줄
 		vector(InputIterator first,
@@ -446,9 +461,7 @@ namespace ft
 			return ;
 		}
 		else if (n > capacity())
-		{
-			this->__reallocate(n);
-		}
+			this->__reallocate(2 * capacity());
 		insert(end(), n - prev_size, val);
 	}
 
@@ -556,7 +569,12 @@ namespace ft
 	{
 		difference_type diff = position - begin();
 		if (this->end_ == this->end_cap())
-			reserve(size_type(capacity() + 1));
+		{
+			if (empty())
+				reserve(size_type(1));
+			else
+				reserve(size_type(capacity() * 2));
+		}
 		pointer p = this->begin_ + diff;
 		pointer old_end = this->end_;
 		while (old_end != p)
@@ -575,7 +593,15 @@ namespace ft
 										const value_type& val)
 	{
 		difference_type diff = position - begin();
-		if (size() + n > capacity()) reserve(size() + n);
+		if (size() + n > capacity())
+		{
+			if (empty())
+				reserve(size_type(n));
+			else if	(size() + n < capacity() * 2)
+				reserve(capacity() * 2);
+			else
+				reserve(size() + n);
+		}
 		pointer p = this->begin_ + diff;
 		pointer old_end = this->end_;
 		while (old_end != p)
@@ -610,10 +636,17 @@ namespace ft
 		difference_type diff = position - begin();
 		if (in_size <= 0) 
 			return ;
-		if (in_size + size() > capacity()) 
-			reserve(in_size + size());
-		iterator p = this->begin_ + diff;
-		iterator old_end = this->end_;
+		if (in_size + size() > capacity())
+		{
+			if (empty())
+				reserve(size_type(in_size));
+			else if	(size() + in_size < capacity() * 2)
+				reserve(capacity() * 2);
+			else
+				reserve(size() + in_size);
+		}
+		pointer p = this->begin_ + diff;
+		pointer old_end = this->end_;
 		while (old_end != p) 
 		{
 			--old_end;
@@ -675,7 +708,7 @@ namespace ft
 		this->__copy_data(other);
 		other.__copy_data(tmp_begin_, tmp_end_, tmp_end_cap_);
 	}
-	
+
 	// 4. 이미 있던 벡터의 원소(데이터)를 새 벡터에 복사
 	template <typename Tp, typename Allocator>
 	void vector<Tp, Allocator>::__reallocate(size_type n)

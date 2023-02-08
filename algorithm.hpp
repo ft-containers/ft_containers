@@ -6,15 +6,6 @@
 namespace ft
 {
 	// equal
-	template <class InputIterator1, class InputIterator2>
-	bool
-	equal(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2)
-	{
-		typedef typename ft::iterator_traits<InputIterator1>::value_type v1;
-		typedef typename ft::iterator_traits<InputIterator2>::value_type v2;
-		return equal(first1, last1, first2, __equal_to<v1, v2>());
-	}
-
 	template <class InputIterator1, class InputIterator2, class BinaryPredicate>
 	bool
 	equal(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, BinaryPredicate pred)
@@ -24,7 +15,16 @@ namespace ft
 				return false;
 		return true;
 	}
-		
+
+	template <class InputIterator1, class InputIterator2>
+	bool
+	equal(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2)
+	{
+		typedef typename ft::iterator_traits<InputIterator1>::value_type v1;
+		typedef typename ft::iterator_traits<InputIterator2>::value_type v2;
+		return ft::equal(first1, last1, first2, ft::__equal_to<v1, v2>());
+	}
+
 	template <class Compare, class InputIterator1, class InputIterator2>
 	bool
 	lexicographical_compare(InputIterator1 first1, InputIterator1 last1,
