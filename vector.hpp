@@ -57,7 +57,7 @@ namespace ft
 
 		// constructor 
 		vector_base() throw()
-			: begin_(NULL), end_(NULL), end_cap_(NULL, std::allocator<Tp>()) {}
+			: begin_(NULL), end_(NULL), end_cap_(NULL, allocator_type()) {}
 
 		vector_base(const allocator_type& a)
 			: begin_(NULL), end_(NULL), end_cap_(NULL, a) {}
