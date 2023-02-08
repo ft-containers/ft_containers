@@ -29,28 +29,28 @@
 // 	cout << std::left << std::setw(30) << std::setfill(' ') << t;
 // }
 
+// template <class T, class A>
+// int run_vector_allocator_unit_test(std::string test_name, void (func)(ft::vector<T, A>))
+// {
+//     ft::vector<T, A> my_vector;
+
+//     printElement(test_name);
+//     func(my_vector);
+//     if (_allocator_used) {
+//         printElement("OK");
+//         cout << endl;
+//         return (0);
+//     }
+//     else {
+//         printElement("FAILED");
+//         cout << endl;
+//         return (1);
+//     }
+// }
+
+
 template <class T, class A>
-int run_vector_allocator_unit_test(std::string test_name, void (func)(std::vector<T, A>))
-{
-    std::vector<T, A> my_vector();
-
-    printElement(test_name);
-    func(my_vector);
-    if (_allocator_used) {
-        printElement("OK");
-        cout << endl;
-        return (0);
-    }
-    else {
-        printElement("FAILED");
-        cout << endl;
-        return (1);
-    }
-}
-
-
-template <class T, class A>
-void allocator_test(std::vector<T, A> vector)
+void allocator_test(ft::vector<T, A> vector)
 {
     for (int i = 0; i < 10; ++i) {
         vector.push_back(i);
