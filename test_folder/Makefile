@@ -4,7 +4,7 @@ CXX = c++ -g3 -fsanitize=address
 # CXXFLAGS = -Wall -Wextra -Werror -g3
 # -std=c++98 -pedantic
 
-SRCS = ft_container_test.cpp 
+SRCS = stack.cpp 
 #		enable_if.cpp 
 		
 

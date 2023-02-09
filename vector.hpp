@@ -32,7 +32,7 @@ namespace ft
 	{ std::__throw_out_of_range("vector"); }
 
 	// vector_base class
-	template <typename Tp, typename Allocator = std::allocator<Tp>()>
+	template <typename Tp, typename Allocator = std::allocator<Tp> >
 	class vector_base
 		: protected vector_base_common<true>
 	{
@@ -124,23 +124,6 @@ namespace ft
 		typedef vector_iterator<const_pointer>			const_iterator;
 		typedef ft::reverse_iterator<iterator>			reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
-
-
-		// constructor
-			// //clang
-			// vector() _NOEXCEPT_(is_nothrow_default_constructible<allocator_type>::value)
-			// {
-			// #if _LIBCPP_DEBUG_LEVEL >= 2
-			// 			__get_db()->__insert_c(this);
-			// #endif
-			// 		}
-			// 	_LIBCPP_INLINE_VISIBILITY explicit vector(const allocator_type& __a)
-			// #if _LIBCPP_STD_VER <= 14
-			// 		_NOEXCEPT_(is_nothrow_copy_constructible<allocator_type>::value)
-			// #else
-			// 		_NOEXCEPT
-			// #endif
-			// : __base(__a)
 
 		vector() throw() {}
 		explicit vector(const allocator_type& a) throw() : base(a) {} //explicit
