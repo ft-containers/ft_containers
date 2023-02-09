@@ -238,6 +238,7 @@ namespace ft
 		iterator erase(iterator first, iterator last);
 
 		void swap(vector& x) { this->__swap_data(x); }
+
 		void clear()
 		{
 			if (this->begin_) 
