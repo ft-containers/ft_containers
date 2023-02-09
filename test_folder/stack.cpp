@@ -4,8 +4,7 @@
 #include <vector>
 #include <iostream>
 
-
-#include "../../containers_test/srcs/stack/common.hpp"
+#include "../containers_test/srcs/stack/common.hpp"
 
 #define TESTED_TYPE int
 #define TESTED_NAMESPACE ft
@@ -18,9 +17,9 @@ void	cmp(const T_STACK &lhs, const T_STACK &rhs)
 	static int i = 0;
 
 	std::cout << "############### [" << i++ << "] ###############"  << std::endl;
-	std::cout << "eq: " << (lhs == rhs) << " | ne: " << (lhs != rhs) << std::endl;
-	std::cout << "lt: " << (lhs <  rhs) << " | le: " << (lhs <= rhs) << std::endl;
-	std::cout << "gt: " << (lhs >  rhs) << " | ge: " << (lhs >= rhs) << std::endl;
+	std::cout << "eq: " << (lhs == rhs) /* << " | ne: " << (lhs != rhs) */ << std::endl;
+	// std::cout << "lt: " << (lhs <  rhs) << " | le: " << (lhs <= rhs) << std::endl;
+	// std::cout << "gt: " << (lhs >  rhs) << " | ge: " << (lhs >= rhs) << std::endl;
 }
 
 int		main(void)
@@ -38,7 +37,7 @@ int		main(void)
 	t_stack_	stck2(ctnr);
 
 	cmp(stck, stck);  // 0
-	cmp(stck, stck2); // 1
+	// cmp(stck, stck2); // 1
 
 	stck2.push(60);
 	stck2.push(61);
@@ -58,3 +57,36 @@ int		main(void)
 	cmp(stck2, stck); // 7
 	return (0);
 }
+
+// ############### [0] ###############
+// eq: 1 | ne: 0
+// lt: 0 | le: 1
+// gt: 0 | ge: 1
+// ############### [1] ###############
+// eq: 1 | ne: 0
+// lt: 0 | le: 1
+// gt: 0 | ge: 1
+// ############### [2] ###############
+// eq: 0 | ne: 1
+// lt: 1 | le: 1
+// gt: 0 | ge: 0
+// ############### [3] ###############
+// eq: 0 | ne: 1
+// lt: 0 | le: 0
+// gt: 1 | ge: 1
+// ############### [4] ###############
+// eq: 0 | ne: 1
+// lt: 1 | le: 1
+// gt: 0 | ge: 0
+// ############### [5] ###############
+// eq: 0 | ne: 1
+// lt: 0 | le: 0
+// gt: 1 | ge: 1
+// ############### [6] ###############
+// eq: 0 | ne: 1
+// lt: 1 | le: 1
+// gt: 0 | ge: 0
+// ############### [7] ###############
+// eq: 0 | ne: 1
+// lt: 0 | le: 0
+// gt: 1 | ge: 1

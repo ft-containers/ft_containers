@@ -737,33 +737,32 @@ namespace ft
 	void swap (vector<Tp, Allocator>& x, vector<Tp, Allocator>& y)
 	{ x.swap(y); }
 
+	// non_member func 
+	template <class Tp, class Allocator>
+	bool operator==(const vector<Tp, Allocator>& x, const vector<Tp, Allocator>& y)
+	{
+		return (x.size() == y.size() && ft::equal(x.begin(), x.end(), y.begin()));
+	}
+
+	template <class Tp, class Allocator>
+	bool operator!=(const vector<Tp, Allocator>& x, const vector<Tp, Allocator>& y)
+	{ return !(x == y); }
+
+	template <class Tp, class Allocator>
+	bool operator<(const vector<Tp, Allocator>& x, const vector<Tp, Allocator>& y)
+	{ return ft::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end()); }
+
+	template <class Tp, class Allocator>
+	bool operator<=(const vector<Tp, Allocator>& x, const vector<Tp, Allocator>& y)
+	{ return !(y < x); }
+
+	template <class Tp, class Allocator>
+	bool operator>(const vector<Tp, Allocator>& x, const vector<Tp, Allocator>& y)
+	{ return (y < x); }
+
+	template <class Tp, class Allocator>
+	bool operator>=(const vector<Tp, Allocator>& x, const vector<Tp, Allocator>& y)
+	{ return !(x < y); }
+
 };
-
-// non_member func 
-template <class Tp, class Allocator>
-bool operator== (const ft::vector<Tp, Allocator>& x, const ft::vector<Tp, Allocator>& y)
-{
-	const typename ft::vector<Tp, Allocator>::size_type sz = x.size();
-	return (sz == y.size() && ft::equal(x.begin(), x.end(), y.begin()));
-}
-template <class Tp, class Allocator>
-bool operator!= (const ft::vector<Tp, Allocator>& x, const ft::vector<Tp, Allocator>& y)
-{ return !(x == y); }
-
-template <class Tp, class Allocator>
-bool operator<  (const ft::vector<Tp, Allocator>& x, const ft::vector<Tp, Allocator>& y)
-{ return ft::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end()); }
-
-template <class Tp, class Allocator>
-bool operator<= (const ft::vector<Tp, Allocator>& x, const ft::vector<Tp, Allocator>& y)
-{ return !(y < x); }
-
-template <class Tp, class Allocator>
-bool operator>  (const ft::vector<Tp, Allocator>& x, const ft::vector<Tp, Allocator>& y)
-{ return (y < x); }
-
-template <class Tp, class Allocator>
-bool operator>= (const ft::vector<Tp, Allocator>& x, const ft::vector<Tp, Allocator>& y)
-{ return !(x < y); }
-
 #endif
