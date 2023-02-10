@@ -47,6 +47,8 @@ namespace ft
 		typedef Ty* pointer;
 		typedef Ty& reference;
 	};
+	// pair를 위한 특수화도 필요할듯. random_access_iterator가 아니니깐
 };
 
 #endif
+깐

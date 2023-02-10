@@ -10,9 +10,9 @@
 #ifndef _LIBCPP_MAP
 #define _LIBCPP_MAP
 
-/*
 
-    map synopsis
+/*
+    //map synopsis
 
 namespace std
 {

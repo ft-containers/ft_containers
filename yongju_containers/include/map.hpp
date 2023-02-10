@@ -32,6 +32,12 @@ class map {
   typedef _Alloc allocator_type;
   typedef ft::pair<const key_type, mapped_type> value_type;
 
+int a = 3;
+int b = 6;
+
+pair<int, int> = make_pair
+
+
  private:
   typedef __tree<key_type, value_type, ft::select_first<value_type>,
                  key_compare, allocator_type>

@@ -236,9 +236,9 @@ struct __tree_const_iterator : public iterator<bidirectional_iterator_tag, _T> {
 /**
  * @brief RB-tree class
  *
- * @tparam _Key: key of each node
- * @tparam _Val: value of each node
- * @tparam _KeyOfValue: get key of value functor
+ * @tparam _Key: key of each node // us-> key
+ * @tparam _Val: value of each node //us -> pair
+ * @tparam _KeyOfValue: get key of value functor //us-> p
  * @tparam _Compare: Comparing functor
  * @tparam _Alloc: allocator (default: std::allocator<_Val>)
  */
