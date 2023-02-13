@@ -8,6 +8,7 @@
 #include <memory>
 // #include <utility>
 #include <functional> //less
+#include "utility.hpp"
 // #include <initializer_list>
 // #include <type_traits>
 // #include <version>
@@ -72,6 +73,6 @@ namespace ft
 	template <class _Key2, class _Value2, class _Comp2, class _Alloc2>
 	friend class  map;
 
+	};
 };
-
 #endif

@@ -137,30 +137,161 @@ namespace ft
 			return y;
 		};
 
-		node_type_pointer _right_rotate(node_type_pointer parent)
+		node_type_pointer _right_rotate(node_type_pointer x)
 		{
-			node_type_pointer child = parent->left;
-			node_type_pointer T2 = child->right;
-			node_type_pointer p = parent->parent;
-			child->right = parent;
-			parent->left = T2;
+			node_type_pointer y = x->left;
+			node_type_pointer T2 = y->right;
+			node_type_pointer p = x->parent;
+			y->right = x;
+			x->left = T2;
 			if (p != this->_end)
 			{
-				if (p->right == parent)
-					p->right = child;
+				if (p->right == x)
+					p->right = y;
 				else
-					p->left = child;
+					p->left = y;
 			}
-			child->parent = parent->parent;
-			parent->parent = child;
+			y->parent = x->parent;
+			x->parent = y;
 			if (T2 != NULL)
-				T2->parent = parent;
-			parent->height = std::max(_height(parent->left), _height(parent->right)) + 1;
-			child->height = std::max(_height(child->left), _height(child->right)) + 1;
-			return child;
+				T2->parent = x;
+			x->height = std::max(_height(x->left), _height(x->right)) + 1;
+			y->height = std::max(_height(y->left), _height(y->right)) + 1;
+			return y;
 		};
 
+		node_type_pointer _right_left_rotate(node_type_pointer node)
+		{
+			node->right = _rightRotate(node->right);
+			return (_leftRotate(node));
+		};
 
+		node_type_pointer _left_right_rotate(node_type_pointer node)
+		{
+			node->left = _left_rotate(node->left);
+			return (_right_rotate(node));
+		};
+
+		node_type_pointer	_re_balance(node_type_pointer node)
+		{
+			int	balance_factor = _get_balance_factor(node);
+			if (balance_factor > 1)
+			{
+				if (_get_balance_factor(node->left) >= 0)
+					return (_right_rotate(node));
+				else
+					return (_left_right_rotate(node));
+			}
+			else if (balance_factor < -1)
+			{
+				if (_get_balance_factor(node->right) <= 0)
+					return (_left_rotate(node));
+				else
+					return (_right_left_rotate(node));
+			}
+			return (node);
+		};
+		
+		void _reset_height(node_type_pointer temp)
+		{
+			if (!temp->left && !temp->right)
+				temp->height = 1;
+			else if (temp->left == NULL)
+				temp->height = 1 + temp->right->height;
+			else if (temp->right == NULL /* || temp->right == this->_end */)
+				temp->height = 1 + temp->left->height;
+			else
+				temp->height = 1 + std::max(temp->right->height, temp->left->height);
+		};
+
+		node_type_pointer _insert(node_type_pointer temp, node_type_pointer new_node)
+		{
+			if (temp == NULL || temp == this->_end)
+				return (new_node);
+			if (!this->_comp(temp->key.first, new_node->key.first))
+			{
+				temp->left = _insert(temp->left, new_node);
+				if (temp->left == new_node)
+					new_node->parent = temp;
+			}
+			else if (this->_comp(temp->key.first, new_node->key.first))
+			{
+				temp->right = _insert(temp->right, new_node);
+				if (temp->right == new_node)
+					new_node->parent = temp;
+			}
+			else
+				return (temp);
+			_reset_height(temp);
+			temp = _re_balance(temp);
+			return (temp);
+		};
+
+		node_type_pointer	_remove(node_type_pointer root, T key)
+		{
+			if (root == NULL)
+				return (NULL);
+			else if (this->_comp(key.first, root->key.first))
+				root->left = _remove(root->left, key);
+			else if (this->_comp(root->key.first, key.first))
+				root->right = _remove(root->right, key);
+			else
+			{
+				if (root->left == NULL && root->right == NULL)
+				{
+					this->_alloc.destroy(root);
+					this->_alloc.deallocate(root, 1);
+					root = NULL;
+					return (root);
+				}
+				else if (root->left == NULL)
+				{
+					node_type_pointer	temp = root;
+					root = root->right;
+					root->parent = temp->parent;
+					this->_alloc.destroy(temp);
+					this->_alloc.deallocate(temp, 1);
+					temp = NULL;
+					return (root);
+				}
+				else if (root->right == NULL)
+				{
+					node_type_pointer	temp = root;
+					root = root->left;
+					root->parent = temp->parent;
+					this->_alloc.destroy(temp);
+					this->_alloc.deallocate(temp, 1);
+					temp = NULL;
+					return (root);
+				}
+				else
+				{
+					node_type_pointer temp = _tree_min(root->right);
+					value_type p = temp->key;
+					root->right = _remove(root->right , temp->key);
+					this->_alloc.construct(root, p);
+				}
+			}
+			_reset_height(root);
+			root = _re_balance(root);
+			return (root);
+		};
+	};
+
+	template<typename node_type_pointer>
+	node_type_pointer _tree_min(node_type_pointer temp)
+	{
+		while (temp->left != NULL)
+			temp = temp->left;
+		return (temp);
+	};
+
+	template<typename node_type_pointer>
+	node_type_pointer _tree_max(node_type_pointer temp)
+	{
+		while (temp->right != NULL)
+			temp = temp->right;
+		return (temp);
 	};
 }
 #endif
