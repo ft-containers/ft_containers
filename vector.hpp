@@ -50,10 +50,10 @@ namespace ft
 		typedef const_pointer								const_iterator;
 
 		// 함수와 변수를 구분하기 위하여 맨 뒤에 는더바맨.
-		iterator											begin_;
-		iterator											end_;
+		iterator						begin_;
+		iterator						end_;
 		// end_cap_.first는 iterator, end_cap_.second는 allocator
-		pair<iterator, allocator_type>						end_cap_;
+		pair<iterator, allocator_type>	end_cap_;
 
 		// constructor 
 		vector_base() throw()

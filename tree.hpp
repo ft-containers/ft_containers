@@ -23,15 +23,15 @@ namespace ft
 	class tree
 	{
 	public:
-		typedef _Key					key_type;
-		typedef _Val					value_type;
-		typedef value_type				*pointer;
-		typedef const value_type		*const_pointer;
-		typedef value_type				&reference;
-		typedef const value_type		&const_reference;
-		typedef size_t					size_type;
-		typedef ptrdiff_t				difference_type;
-		typedef _Alloc					allocator_type;
+		typedef _Key				key_type;
+		typedef _Val				value_type;
+		typedef value_type			*pointer;
+		typedef const value_type	*const_pointer;
+		typedef value_type			&reference;
+		typedef const value_type	&const_reference;
+		typedef size_t				size_type;
+		typedef ptrdiff_t			difference_type;
+		typedef _Alloc				allocator_type;
 
 		typedef ft::__tree_iterator<value_type>			iterator;
 		typedef ft::__tree_const_iterator<value_type>	const_iterator;
@@ -275,6 +275,74 @@ namespace ft
 			_reset_height(root);
 			root = _re_balance(root);
 			return (root);
+		};
+
+		node_type_pointer _search(node_type_pointer temp, key_type key) const
+		{
+			if (temp == NULL)
+				return (this->_end);
+			if (temp->key.first == key)
+				return (temp);
+			else if (this->_comp(key, temp->key.first))
+				return (_search(temp->left, key));
+			else if (this->_comp(temp->key.first, key))
+				return (_search(temp->right, key));
+
+			return (this->_end);
+		};
+
+	public:
+		node_type_pointer	insert(value_type key)
+		{
+			node_type_pointer newnode = _makeNode(key);
+			if (this->_root == this->_end)
+			{
+				this->_root = newnode;
+				this->_root->parent = this->_end;
+				this->_end->left = this->_root;
+				++this->_size;
+			}
+			else
+			{
+				++this->_size;
+				this->_root = _insert(this->_root, newnode);
+			}
+			return (newnode);
+		};
+
+		// why 필요? -> 원하는 위치에 원소 삽입을 위해?
+		// Node_ptr	insertInPossition(Node_ptr position, T key)
+		// {
+		// 	Node_ptr newnode = _makeNode(key);
+		// 	if (position == this->_end)
+		// 	{
+		// 		position = newnode;
+		// 		position->parent = this->_end;
+		// 		this->_end->left = position;
+		// 		++this->_size;
+		// 	}
+		// 	else
+		// 	{
+		// 		++this->_size;
+		// 		position = _insert(position, newnode);
+		// 	}
+		// 	return (newnode);
+		// };
+
+		void	remove(T key)
+		{
+			this->_root =  _remove(this->_root, key);
+		};
+		
+		void	clear()
+		{
+			if (this->_root != this->_end)
+			{
+				_destroy(this->_root);
+				this->_size = 0;
+				this->_root = this->_end;
+				this->_end->left = this->_root;
+			}
 		};
 	};
 

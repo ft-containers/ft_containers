@@ -36,7 +36,9 @@ namespace ft
 		typedef typename Iter::reference reference;
 	};
 
-	// pointer를 위한 iterator_traits
+	// vector_iterator를 위한 iterator_traits
+	// random_access_iterator의 경우 표준 라이브러리에 반복기 유형이 지정되어 있지않아,
+	// 일반적으로 특수화를 진행한다
 	template <typename Ty>
 	struct iterator_traits<Ty*>
 	{
@@ -47,8 +49,17 @@ namespace ft
 		typedef Ty* pointer;
 		typedef Ty& reference;
 	};
-	// pair를 위한 특수화도 필요할듯. random_access_iterator가 아니니깐
+
+	// template <typename Ty>
+	// struct iterator_traits
+	// {
+	// 	typedef bidirectional_iterator_tag iterator_category;
+	// 	typedef Ty value_type;
+	// 	typedef ptrdiff_t difference_type;
+	// 	typedef ptrdiff_t distance_type;
+	// 	typedef Ty* pointer;
+	// 	typedef Ty& reference;
+	// };
 };
 
 #endif
-깐
