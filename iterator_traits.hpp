@@ -50,16 +50,6 @@ namespace ft
 		typedef Ty& reference;
 	};
 
-	// template <typename Ty>
-	// struct iterator_traits
-	// {
-	// 	typedef bidirectional_iterator_tag iterator_category;
-	// 	typedef Ty value_type;
-	// 	typedef ptrdiff_t difference_type;
-	// 	typedef ptrdiff_t distance_type;
-	// 	typedef Ty* pointer;
-	// 	typedef Ty& reference;
-	// };
 };
 
 #endif

@@ -21,36 +21,40 @@ namespace ft
 		node_pointer	it_;
 
 	public:
-		TreeIter(): it_(NULL) {};
-		explicit	TreeIter( node_pointer x ): it_(x) {};
+		map_iterator(): it_(NULL) {};
+		explicit	map_iterator( node_pointer x ): it_(x) {};
 		template <class Iter>
-		TreeIter ( const TreeIter<Iter, Node_ptr>& node_it ): it_(node_it.base()) {};
+		map_iterator ( const map_iterator<Iter, node_pointer>& node_it ): it_(node_it.base()) {};
 
 		node_pointer	base() const							{ return (this->_it); };
-		reference		operator*() const						{ return (this->_it->key); };
-		TreeIter&		operator++()							{this->_it = successor(this->_it); return (*this); };		// pre-increment
-		TreeIter		operator++(int)							{ TreeIter temp(*this); ++(*this); return (temp); };		// post-increment
-		TreeIter&		operator--()							{this->_it = predecessor(this->_it); return (*this); };		// pre-decrement
-		TreeIter		operator--(int)							{ TreeIter temp(*this); --(*this); return (temp); };		// post-decrement
+		reference		operator* () const						{ return (this->_it->key); };
+		map_iterator&	operator++()							{ this->_it = successor(this->_it); return (*this); };			// pre-increment
+		map_iterator	operator++(int)							{ map_iterator temp(*this); ++(*this); return (temp); };		// post-increment
+		map_iterator&	operator--()							{ this->_it = predecessor(this->_it); return (*this); };		// pre-decrement
+		map_iterator	operator--(int)							{ map_iterator temp(*this); --(*this); return (temp); };		// post-decrement
 		pointer			operator->()							{ return (&(operator*())); };
 		reference		operator[]( difference_type n ) const	{ return (*(this->_it + n)); };
 	};
 	
 	template <class Tp, class node_pointer>
-	bool operator== (const TreeIter<Tp, node_pointer>& lhs, const TreeIter<Tp, node_pointer>& rhs) { return (lhs.base() == rhs.base()); };
+	bool operator== (const map_iterator<Tp, node_pointer>& x, const map_iterator<Tp, node_pointer>& y)
+		{ return (x.base() == y.base()); };
 	template <class Tp, class node_pointer>
-	bool operator!= (const TreeIter<Tp, node_pointer>& lhs, const TreeIter<Tp, node_pointer>& rhs) { return (lhs.base() != rhs.base()); };
+	bool operator!= (const map_iterator<Tp, node_pointer>& x, const map_iterator<Tp, node_pointer>& y)
+		{ return (x.base() != y.base()); };
 	template <class Tp, class node_pointer>
-	bool operator<  (const TreeIter<Tp, node_pointer>& lhs, const TreeIter<Tp, node_pointer>& rhs) { return (lhs.base() < rhs.base()); };
+	bool operator<  (const map_iterator<Tp, node_pointer>& x, const map_iterator<Tp, node_pointer>& y)
+		{ return (x.base() < y.base()); };
 	template <class Tp, class node_pointer>
-	bool operator<= (const TreeIter<Tp, node_pointer>& lhs, const TreeIter<Tp, node_pointer>& rhs) { return (lhs.base() <= rhs.base()); };
+	bool operator<= (const map_iterator<Tp, node_pointer>& x, const map_iterator<Tp, node_pointer>& y)
+		{ return (x.base() <= y.base()); };
 	template <class Tp, class node_pointer>
-	bool operator>  (const TreeIter<Tp, node_pointer>& lhs, const TreeIter<Tp, node_pointer>& rhs) { return (lhs.base() > rhs.base()); };
+	bool operator>  (const map_iterator<Tp, node_pointer>& x, const map_iterator<Tp, node_pointer>& y)
+		{ return (x.base() > y.base()); };
 	template <class Tp, class node_pointer>
-	bool operator>=  (const TreeIter<Tp, node_pointer>& lhs, const TreeIter<Tp, node_pointer>& rhs) { return (lhs.base() >= rhs.base()); };
+	bool operator>=  (const map_iterator<Tp, node_pointer>& x, const map_iterator<Tp, node_pointer>& y)
+		{ return (x.base() >= y.base()); };
 
-
-
-}; //ft _end;
+};
 
 #endif

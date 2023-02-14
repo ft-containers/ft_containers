@@ -361,5 +361,37 @@ namespace ft
 			temp = temp->right;
 		return (temp);
 	};
+
+	template<class node_type_pointer>
+	node_type_pointer successor(node_type_pointer node)
+	{
+		if (node->right)
+			return (_tree_min(node->right));
+
+		node_type_pointer temp = node->parent;
+		while (temp && temp->right == node)
+		{
+			node = temp;
+			temp = temp->parent;
+		}
+		return (temp);
+	};
+
+	template<class node_type_pointer>
+	node_type_pointer predecessor(node_type_pointer node)
+	{
+		if (node->left)
+			return (_tree_max(node->left));
+
+		node_type_pointer temp = node->parent;
+		while (temp && temp->left == node)
+		{
+			node = temp;
+			temp = temp->parent;
+		}
+		if (temp == NULL)
+			return (node);
+		return (temp);
+	};
 }
 #endif
