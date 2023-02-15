@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   reverse_iterator.hpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbari <mbari@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hjeong <hjeong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 12:02:40 by mbari             #+#    #+#             */
-/*   Updated: 2022/03/13 12:04:55 by mbari            ###   ########.fr       */
+/*   Updated: 2023/02/15 10:32:09 by hjeong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 namespace ft
 {
 	template<class T>
-	class reverse_iterator : public std::iterator<std::random_access_iterator_tag, T>
+	class reverse_iterator //: public std::iterator<std::random_access_iterator_tag, T>
 	{
 		public:
 			typedef T													iterator_type;

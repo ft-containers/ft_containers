@@ -72,17 +72,35 @@ namespace ft
 	//why?
 	template <class _Key2, class _Value2, class _Comp2, class _Alloc2>
 	friend class  map;
+	
+//todo list 
+
 
 	// constructor
+	public:
+		explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):
+			_tree(comp, alloc), _alloc(alloc), _comp(comp) {};
+		template <class InputIterator>
+		map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):
+			_tree(comp, alloc), _alloc(alloc), _comp(comp) { insert(first, last); };
+		map (const map& x) { *this = x; };
 
 	// destructor
 
-	// Iterators - begin end rbegin rend 
+	// Iterators: begin end rbegin rend 
 
-	// Capacity - empty size max_size
+	// Capacity: empty size max_size
 
-	// Element access - operator[] at
+	// Element access: operator[] at
 
+	// Modifiers: insert erase swap clear
+	
+	// Observers: key_comp value_comp
+
+	// Operations: find count lower_bound upper_bound equal_range
+
+	// Allocator: get_allocator
 	};
 };
+
 #endif

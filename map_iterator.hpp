@@ -2,7 +2,7 @@
 #define MAP_ITERATOR_HPP
 
 #include "tree.hpp"
-#include "vector_reverse_iterator.hpp"
+#include "reverse_iterator.hpp"
 
 namespace ft
 {
@@ -33,7 +33,7 @@ namespace ft
 		map_iterator&	operator--()							{ this->_it = predecessor(this->_it); return (*this); };		// pre-decrement
 		map_iterator	operator--(int)							{ map_iterator temp(*this); --(*this); return (temp); };		// post-decrement
 		pointer			operator->()							{ return (&(operator*())); };
-		reference		operator[]( difference_type n ) const	{ return (*(this->_it + n)); };
+		// reference		operator[]( difference_type n ) const	{ return (*(this->_it + n)); };
 	};
 	
 	template <class Tp, class node_pointer>
