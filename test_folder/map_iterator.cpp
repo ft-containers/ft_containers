@@ -1,13 +1,16 @@
 #include <map>
 #include <iostream>
+#include "../map.hpp"
+#include "../map_iterator.hpp"
+
 
 using namespace std;
 
 int main()
 {
 	std::map<char, int> test;
-	std::map<char, int>::iterator it;
-	std::map<char, int>::reverse_iterator re_it;
+	ft::map<char, int>::iterator it;
+	ft::map<char, int>::reverse_iterator re_it;
 
 	test.insert(std::make_pair('a', 1));
 	test.insert(std::make_pair('b', 2));
@@ -29,6 +32,6 @@ int main()
 		++re_it;
 	}
 	std::cout << "========================" << std::endl;
-		std::cout << "re_it[] : " << re_it[1].second << std::endl;
+		// std::cout << "re_it[] : " << re_it[1].second << std::endl;
 
 }

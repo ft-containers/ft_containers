@@ -1,13 +1,13 @@
 #ifndef VECTOR_REVERSE_ITERATOR_HPP
 #define VECTOR_REVERSE_ITERATOR_HPP
 
-#include "vector_iterator.hpp"
-
+#include "iterator_traits.hpp"
+// #include "vector_iterator.hpp"
 namespace ft
 {
 	template <class Iter>
 	class reverse_iterator
-		: public vector_iterator<Iter>
+		// : public vector_iterator<Iter>
 	{
 	protected:
 		Iter current;
