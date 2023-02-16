@@ -13,7 +13,7 @@ namespace ft
 		tree_node*	parent_;
 		tree_node*	left_;
 		tree_node*	right_;
-		size_t		height;
+		size_t		height_;
 
 	public:
 		tree_node(): pair_data_() {};
@@ -28,9 +28,9 @@ namespace ft
 		typedef Val					value_type;
 		typedef Compare				key_compare;
 		typedef Allocator			allocator_type;
-		
+
 	private:
-		// typedef member Types of Nodes 
+		// typedef member Types of Nodes / typedef of tree_node
 		typedef typename allocator_type::template rebind<tree_node<Val> >::other	allocator_node;
 		typedef typename allocator_node::reference									node_reference;
 		typedef typename allocator_node::const_reference							node_const_reference;
@@ -38,23 +38,25 @@ namespace ft
 		typedef typename allocator_node::pointer									node_pointer;
 		typedef typename allocator_node::const_pointer								node_const_pointer;
 		typedef typename allocator_node::size_type									node_size_type;
+		// 테스터로 다 완성 해보고 잘 되면 node_type_pointer->node_type으로 바꿔버리기
+		// 위의 node_pointer와 동일
 		typedef tree_node<value_type>												node_type;
 		typedef node_type*															node_type_pointer;
 
 	public:
-		// typedef member Types of Tree iterator
-		typedef typename allocator_type::reference						reference;
-		typedef typename allocator_type::const_reference				const_reference;
-		typedef typename allocator_type::difference_type				difference_type;
-		typedef typename allocator_type::pointer						pointer;
-		typedef typename allocator_type::const_pointer					const_pointer;
-		typedef typename allocator_type::size_type						size_type;
-		typedef typename value_type::first_type							key_type;
-		typedef typename value_type::second_type						mapped_type;
-		typedef ft::map_iterator<pointer, node_type_pointer>			iterator;
-		typedef ft::map_iterator<const_pointer, node_type_pointer>		const_iterator;
-		typedef ft::reverse_iterator<iterator>							reverse_iterator;
-		typedef ft::reverse_iterator<const_iterator>					const_reverse_iterator;
+		// typedef member Types of Tree iterator / typedef of Allocator = pair<>
+		typedef typename allocator_type::reference					reference;
+		typedef typename allocator_type::const_reference			const_reference;
+		typedef typename allocator_type::difference_type			difference_type;
+		typedef typename allocator_type::pointer					pointer;
+		typedef typename allocator_type::const_pointer				const_pointer;
+		typedef typename allocator_type::size_type					size_type;
+		typedef typename value_type::first_type						key_type;
+		typedef typename value_type::second_type					mapped_type;
+		typedef ft::map_iterator<pointer, node_type_pointer>		iterator;
+		typedef ft::map_iterator<const_pointer, node_type_pointer>	const_iterator;
+		typedef ft::reverse_iterator<iterator>						reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>				const_reverse_iterator;
 
 	private:
 		// Declare all attributes needed in Tree
@@ -74,15 +76,33 @@ namespace ft
 		};
 		~tree() {};
 
+		// Iterators
+		iterator		begin()					{ return (iterator(get_min())); };
+		const_iterator	begin() const			{ return (const_iterator(get_min())); };
+		iterator		end()					{ return (iterator(this->end_)); };
+		const_iterator	end() const				{ return (const_iterator(this->end_)); };
+		reverse_iterator rbegin()				{ return (reverse_iterator(end())); };
+		const_reverse_iterator rbegin() const	{ return (const_reverse_iterator(end())); };
+		reverse_iterator rend()					{ return (reverse_iterator(begin())); };
+		const_reverse_iterator rend() const		{ return (const_reverse_iterator(begin())); };
+	
+		// Capacity
+		bool		empty() const 		{ return (this->size_ == 0); };
+		size_type 	size() const		{ return (this->size_); };
+		size_type 	max_size() const	//min's parameter 어떤 의미인지 알기!
+		{ return (std::min<size_type>(std::numeric_limits<size_type>::max() / sizeof(node_type_pointer), \
+										std::numeric_limits<difference_type>::max())); };
+
 	private:
+		// private func
 		node_type_pointer _make_node(value_type key)
 		{
 			node_type_pointer newnode = this->alloc_.allocate(1);
 			this->alloc_.construct(newnode, key);
-			newnode->height = 1;
-			newnode->parent = NULL;
-			newnode->left = NULL;
-			newnode->right = NULL;
+			newnode->height_ = 1;
+			newnode->parent_ = NULL;
+			newnode->left_ = NULL;
+			newnode->right_ = NULL;
 			return (newnode);
 		};
 
@@ -98,8 +118,8 @@ namespace ft
 		{
 			if (node != NULL)
 			{
-				_destroy(node->left);
-				_destroy(node->right);
+				_destroy(node->left_);
+				_destroy(node->right_);
 				this->alloc_.destroy(node);
 				this->alloc_.deallocate(node, 1);
 			}
@@ -109,14 +129,14 @@ namespace ft
 		{
 			if (temp == NULL)
 				return (0);
-			return (temp->height);
+			return (temp->height_);
 		};
 
 		int _get_balance_factor(node_type_pointer n)
 		{
 			if (n == NULL)
 				return 0;
-			return (_height(n->left) - _height(n->right));
+			return (_height(n->left_) - _height(n->right_));
 		}
 
 		// rebalance
@@ -149,7 +169,7 @@ namespace ft
 			node_type_pointer T2 = y->right_;
 			node_type_pointer p = x->parent_;
 			y->right_ = x;
-			x->left = T2;
+			x->left_ = T2;
 			if (p != this->end_)
 			{
 				if (p->right_ == x)
@@ -203,11 +223,11 @@ namespace ft
 			if (!temp->left_ && !temp->right_)
 				temp->height = 1;
 			else if (temp->left_ == NULL)
-				temp->height = 1 + temp->right_->height;
+				temp->height_ = 1 + temp->right_->height_;
 			else if (temp->right_ == NULL /* || temp->right_ == this->end_ */)
-				temp->height = 1 + temp->left_->height;
+				temp->height_ = 1 + temp->left_->height_;
 			else
-				temp->height = 1 + std::max(temp->right_->height, temp->left_->height);
+				temp->height_ = 1 + std::max(temp->right_->height_, temp->left_->height_);
 		};
 
 		node_type_pointer _insert(node_type_pointer temp, node_type_pointer new_node)
@@ -243,14 +263,14 @@ namespace ft
 				root->right_ = _remove(root->right_, key);
 			else
 			{
-				if (root->left == NULL && root->right == NULL)
+				if (root->left_ == NULL && root->right_ == NULL)
 				{
 					this->alloc_.destroy(root);
 					this->alloc_.deallocate(root, 1);
 					root = NULL;
 					return (root);
 				}
-				else if (root->left == NULL)
+				else if (root->left_ == NULL)
 				{
 					node_type_pointer	temp = root;
 					root = root->right_;
@@ -316,12 +336,10 @@ namespace ft
 			return (newnode);
 		};
 
-		// why 필요? -> 원하는 위치에 원소 삽입을 위해?
-		// 그리면서 내일(2월 16일) 다시 해보기
 		node_type_pointer	insert_in_position(node_type_pointer position, Val key)
 		{
 			node_type_pointer newnode = _make_node(key);
-			if (position == this->end_)
+			if (position == this->)
 			{
 				position = newnode;
 				position->parent_ = this->end_;
@@ -340,16 +358,90 @@ namespace ft
 		{
 			this->root_ = _remove(this->root_, key);
 		};
-		
+
+		void	swap(Tree &x)
+		{
+			size_type tmp_size = x.size_;
+			allocator_type tmp_alloc = x.alloc_;
+			node_type_pointer tmp_root = x.root_;
+			node_type_pointer tmp_end = x.end_;
+
+			x.size_ = this->size_;
+			this->size_ = tmp_size;
+
+			x.alloc_ = this->alloc_;
+			this->alloc_ = tmp_alloc;
+
+			x.end_ = this->end_;
+			this->end_ = tmp_end;
+
+			x.root_ = this->root_;
+			this->root_ = tmp_root;
+		};
+
+		node_type_pointer lower_bound(key_type val) const
+		{
+			node_type_pointer node = get_min();
+
+			while (!this->_comp(val, node->key.first))
+			{
+				if (val == node->key.first)
+					break;
+				node = successor(node);
+				if (node == NULL || node == this->end_)
+					return (this->end_);
+			}
+			return (node);
+		};
+
+		node_type_pointer upper_bound(key_type val) const
+		{
+			node_type_pointer node = get_min();
+
+			while (!this->_comp(val, node->key.first))
+			{
+				node = successor(node);
+				if (node == NULL || node == this->end_)
+					return (this->end_);
+			}
+			return (node);
+		};
+
 		void	clear()
 		{
 			if (this->root_ != this->end_)
 			{
 				_destroy(this->root_);
-				this->sie_ = 0;
+				this->size_ = 0;
 				this->root_ = this->end_;
-				this->end_->left_ = this->roozt_;
+				this->end_->left_ = this->root_;
 			}
+		};
+
+		node_type_pointer	get_min() const
+		{
+			node_type_pointer * tmp = this->root_;
+
+			while (tmp != this->end_ && tmp->left_)
+				tmp = tmp->left_;
+			return (tmp);
+		};
+		
+		node_type_pointer	get_max() const
+		{
+			node_type_pointer tmp = this->root_;
+
+			while (tmp->right_ && tmp->right_ != this->end_)
+				tmp = tmp->right_;
+			return (tmp);
+		};
+
+		node_type_pointer search(key_type key) const
+		{
+			if (this->root_ == this->end_)
+				return (this->end_);
+			else
+				return (_search(this->root_, key));
 		};
 	};
 

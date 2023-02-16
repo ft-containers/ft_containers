@@ -8,6 +8,7 @@
 #include <memory>
 // #include <utility>
 #include <functional> //less
+#include "algorithm.hpp"
 #include "utility.hpp"
 #include "tree.hpp"
 #include "reverse_iterator.hpp"
@@ -60,20 +61,18 @@ namespace ft
 		key_compare		comp_;
 
 	public:
-		typedef typename tree_type::iterator									iterator;
-		// typedef typename tree_type::const_iterator								const_iterator;
-		typedef ft::reverse_iterator<iterator>									reverse_iterator;
-		// typedef ft::reverse_iterator<const_iterator>							const_reverse_iterator;
+		typedef typename tree_type::iterator					iterator;
+		typedef typename tree_type::const_iterator				const_iterator;
+		typedef ft::reverse_iterator<iterator>					reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator;
 	
 
 	//why? //because of relational operators or swap ?
 	// template <class _Key2, class _Value2, class _Comp2, class _Alloc2>
 	// friend class  map;
 	
-	
-//todo list
-	// constructor
 	public:
+		// constructor
 		explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):
 			tree_(comp, alloc), alloc_(alloc), comp_(comp) {};
 		template <class InputIterator>
@@ -81,9 +80,9 @@ namespace ft
 			tree_(comp, alloc), alloc_(alloc), comp_(comp) { insert(first, last); };
 		map (const map& x) { *this = x; };
 
-	// destructor
+		// destructor
 		~map() { this->tree_.clear(); };
-	// operator=
+		// operator=
 		map& operator= (const map& x)
 		{
 			if (this != &x)
@@ -96,14 +95,26 @@ namespace ft
 			return (*this);
 		};
 		
-	// Iterators: begin end rbegin rend 
+		// Iterators
+		iterator				begin()			{ return (this->tree_.begin()); };
+		const_iterator			begin() const	{ return (this->tree_.begin()); };
+		iterator				end()			{ return (this->tree_.end()); };
+		const_iterator			end() const		{ return (this->tree_.end()); };
+		reverse_iterator		rbegin()		{ return (this->tree_.rbegin()); };
+		const_reverse_iterator	rbegin() const	{ return (this->tree_.rbegin()); };
+		reverse_iterator		rend()			{ return (this->tree_.rend()); };
+		const_reverse_iterator	rend() const	{ return (this->tree_.rend()); };
 
-	// Capacity: empty size max_size
+		// Capacity
+		bool		empty() const		{ return (this->tree_.empty()); };
+		size_type	size() const		{ return (this->tree_.size()); };
+		size_type	max_size() const	{ return (this->tree_.max_size()); };
 
-	// Element access: operator[]
+		// Element access
+		mapped_type& operator[] (const key_type& k)
+		{ return ((*(insert(ft::make_pair(k, mapped_type())).first)).second); };
 
-	// Modifiers: insert erase swap clear
-		
+		// Modifiers
 		ft::pair<iterator,bool> insert (const value_type& val)
 		{
 			iterator node = iterator(this->tree_.search(val.first));
@@ -133,13 +144,99 @@ namespace ft
 				first++;
 			};
 		};
-	
-	// Observers: key_comp value_comp
 
-	// Operations: find count lower_bound upper_bound equal_range
+		void erase (iterator position)
+		{ this->tree_.remove(*position); };
+		
+		size_type erase (const key_type& k)
+		{
+			size_type s = size();
+			this->tree_.remove(*find(k));
+			return (s - size());
+		};
+		
+		void erase (iterator first, iterator last)
+		{
+			iterator position;
+			while(first != last)
+			{
+				position = first;
+				first++;
+				erase(position);
+			}
+		};
+
+		void swap (map& x) { this->tree_.swap(x.tree_); };
+		
+		void clear() { this->tree_.clear(); };
+	
+		// Observers
+		key_compare		key_comp() const	{ return (this->comp_); };
+		valuecompare	value_comp() const	{ return (value_compare(this->comp_)); };
+
+		// Opeations
+		iterator find (const key_type& k)
+		{ return (iterator(this->tree_.search(k))); };
+		
+		const_iterator find (const key_type& k) const
+		{ return (const_iterator(this->tree_.search(k))); };
+
+		size_type count (const key_type& k) const
+		{ return (this->find(k) != this->end() ? 1 : 0); };
+		
+		iterator lower_bound (const key_type& k)
+		{ return (iterator(this->tree_.lower_bound(k))); };
+		
+		const_iterator lower_bound (const key_type& k) const
+		{ return (const_iterator(this->tree_.lower_bound(k))); };
+		
+		iterator upper_bound (const key_type& k)
+		{ return (iterator(this->tree_.upper_bound(k))); };
+		
+		const_iterator upper_bound (const key_type& k) const
+		{ return (const_iterator(this->tree_.upper_bound(k))); };
+		
+		pair<const_iterator, const_iterator> equal_range (const key_type &k) const
+		{ return (ft::make_pair(this->lower_bound(k), this->upper_bound(k))); };
+		
+		pair<iterator, iterator> equal_range (const key_type &k)
+		{ return (ft::make_pair(this->lower_bound(k), this->upper_bound(k))); };
 
 	// Allocator: get_allocator
+		allocator_type get_allocator() const 
+		{ return (allocator_type()); };
+	
 	};
+
+	//non-member functions
+	
+		//relational operators
+	template <class Key, class T, class Compare, class Alloc>
+	bool operator== (const map<Key,T,Compare,Alloc>& lhs, const map<Key,T,Compare,Alloc>& rhs)
+	{ return ((lhs.size() == rhs.size()) && ft::equal(lhs.begin(), lhs.end(), rhs.begin()));};
+	
+	template <class Key, class T, class Compare, class Alloc>
+	bool operator!= (const map<Key,T,Compare,Alloc>& lhs, const map<Key,T,Compare,Alloc>& rhs)
+	{ return (!(lhs == rhs));};
+	
+	template <class Key, class T, class Compare, class Alloc>
+	bool operator<  (const map<Key,T,Compare,Alloc>& lhs, const map<Key,T,Compare,Alloc>& rhs)
+	{ return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));};
+	
+	template <class Key, class T, class Compare, class Alloc>
+	bool operator<= (const map<Key,T,Compare,Alloc>& lhs, const map<Key,T,Compare,Alloc>& rhs)
+	{ return (!(rhs < lhs));};
+	
+	template <class Key, class T, class Compare, class Alloc>
+	bool operator>  (const map<Key,T,Compare,Alloc>& lhs, const map<Key,T,Compare,Alloc>& rhs)
+	{ return (ft::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));};
+	
+	template <class Key, class T, class Compare, class Alloc>
+	bool operator>= (const map<Key,T,Compare,Alloc>& lhs, const map<Key,T,Compare,Alloc>& rhs)
+	{ return (!(lhs < rhs));};
+
+	// swap
+	
 };
 
 #endif

@@ -734,12 +734,12 @@ namespace ft
 			__reconstruct_push_back(val);
 	}
 
-	//swap
+	// swap
 	template <class Tp, class Allocator>
 	void swap (vector<Tp, Allocator>& x, vector<Tp, Allocator>& y)
 	{ x.swap(y); }
 
-	// non_member func 
+	// relational operators
 	template <class Tp, class Allocator>
 	bool operator==(const vector<Tp, Allocator>& x, const vector<Tp, Allocator>& y)
 	{
