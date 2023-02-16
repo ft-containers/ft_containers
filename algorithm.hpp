@@ -2,6 +2,7 @@
 #define ALGORITHM_HPP
 
 #include "comp.hpp"
+#include "iterator_traits.hpp"
 
 namespace ft
 {

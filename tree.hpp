@@ -180,7 +180,7 @@ namespace ft
 			y->parent_ = x->parent_;
 			x->parent_ = y;
 			if (T2 != NULL)
-				T2->parent = x;
+				T2->parent_ = x;
 			x->height_ = std::max(_height(x->left_), _height(x->right_)) + 1;
 			y->height_ = std::max(_height(y->left_), _height(y->right_)) + 1;
 			return y;
@@ -188,8 +188,8 @@ namespace ft
 
 		node_type_pointer _right_left_rotate(node_type_pointer node)
 		{
-			node->right_ = _rightRotate(node->right_);
-			return (_leftRotate(node));
+			node->right_ = _right_rotate(node->right_);
+			return (_left_rotate(node));
 		};
 
 		node_type_pointer _left_right_rotate(node_type_pointer node)
@@ -221,7 +221,7 @@ namespace ft
 		void _reset_height(node_type_pointer temp)
 		{
 			if (!temp->left_ && !temp->right_)
-				temp->height = 1;
+				temp->height_ = 1;
 			else if (temp->left_ == NULL)
 				temp->height_ = 1 + temp->right_->height_;
 			else if (temp->right_ == NULL /* || temp->right_ == this->end_ */)
@@ -234,13 +234,13 @@ namespace ft
 		{
 			if (temp == NULL || temp == this->end_)
 				return (new_node);
-			if (!this->comp_(temp->key.first, new_node->key.first))
+			if (!this->comp_(temp->pair_data_.first, new_node->pair_data_.first))
 			{
 				temp->left_ = _insert(temp->left_, new_node);
 				if (temp->left_ == new_node)
 					new_node->parent_ = temp;
 			}
-			else if (this->comp_(temp->key.first, new_node->key.first))
+			else if (this->comp_(temp->pair_data_.first, new_node->pair_data_.first))
 			{
 				temp->right_ = _insert(temp->right_, new_node);
 				if (temp->right_ == new_node)
@@ -307,11 +307,11 @@ namespace ft
 		{
 			if (temp == NULL)
 				return (this->end_);
-			if (temp->key.first == key)
+			if (temp->pair_data_.first == key)
 				return (temp);
-			else if (this->comp_(key, temp->key.first))
+			else if (this->comp_(key, temp->pair_data_.first))
 				return (_search(temp->left_, key));
-			else if (this->comp_(temp->key.first, key))
+			else if (this->comp_(temp->pair_data_.first, key))
 				return (_search(temp->right_, key));
 
 			return (this->end_);
@@ -339,7 +339,7 @@ namespace ft
 		node_type_pointer	insert_in_position(node_type_pointer position, Val key)
 		{
 			node_type_pointer newnode = _make_node(key);
-			if (position == this->)
+			if (position == this->end_)
 			{
 				position = newnode;
 				position->parent_ = this->end_;
@@ -359,7 +359,7 @@ namespace ft
 			this->root_ = _remove(this->root_, key);
 		};
 
-		void	swap(Tree &x)
+		void	swap(tree &x)
 		{
 			size_type tmp_size = x.size_;
 			allocator_type tmp_alloc = x.alloc_;
@@ -420,7 +420,7 @@ namespace ft
 
 		node_type_pointer	get_min() const
 		{
-			node_type_pointer * tmp = this->root_;
+			node_type_pointer tmp = this->root_;
 
 			while (tmp != this->end_ && tmp->left_)
 				tmp = tmp->left_;

@@ -1,10 +1,10 @@
 #include <map>
-#include <vector>
-#include "containers/map/map.hpp"
-#include "containers/vector/vector.hpp"
 #include <iostream>
+#include "containers/map/map.hpp"
+#include "containers/map/iterator.hpp"
 
-using namespace ft;
+
+using namespace std;
 
 int main()
 {
@@ -19,28 +19,34 @@ int main()
 
 	it = test.begin();
 	re_it = test.rbegin();
+	// 터져야하는데 안터짐
+	// re_it = test.rend();
+	// std::cout << "re_it : " << re_it->second << std::endl;
 
 	while (it != test.end())
 	{
 		std::cout << "it : " << it->second << std::endl;
 		++it;
 	}
-	std::cout << "========================" << std::endl;
-	while (re_it != test.rend())
-	{
-		std::cout << "re_it : " << re_it->second << std::endl;
-		++re_it;
-	}
-	std::cout << "========================" << std::endl;
-	// std::cout << "re_it[] : " << re_it[1].second << std::endl;
+	--it;
+	std::cout << "it : " << it->second << std::endl;
+	--it;
+	std::cout << "it : " << it->second << std::endl;
 
-	ft::vector<int> v;
-	ft::vector<int>::reverse_iterator re_it2;
-	v.push_back(1);
-	v.push_back(2);
-	v.push_back(3);
 
-	re_it2 = v.rbegin();
-	std::cout << "re_it2[] : " << re_it2[1] << std::endl;
+	std::cout << "========================" << std::endl;
+	// re_it = test.rend();
+	// re_it++;
+	std::cout << "re_it : " << re_it->second << std::endl;
+
+	// while (re_it != test.rend())
+	// {
+	// 	std::cout << "re_it : " << re_it->second << std::endl;
+	// 	--re_it;
+	// }
+
+	// std::cout << "========================" << std::endl;
+	// 	std::cout << "re_it[] : " << re_it['b'].second << std::endl;
+	// 	std::cout << "re_it[] : " << re_it['e'].second << std::endl;
 
 }
