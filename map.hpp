@@ -128,6 +128,7 @@ namespace ft
 		iterator insert (iterator position, const value_type& val)
 		{
 			node_type_pointer node = position.base();
+			// if 부분을 없애면 잘 돌아간다
 			if (val.first > predecessor(node)->pair_data_.first && val.first < successor(node)->pair_data_.first)
 				position = iterator(this->tree_.insert_in_position(node, val));
 			else
