@@ -40,7 +40,7 @@ namespace ft
 		class value_compare
 			: public std::binary_function<value_type, value_type, bool>
 		{
-			// friend class map; //need?
+			friend class map;
 
 			protected:
 				key_compare comp;
@@ -197,10 +197,10 @@ namespace ft
 		{ return (const_iterator(this->tree_.upper_bound(k))); };
 		
 		pair<const_iterator, const_iterator> equal_range (const key_type &k) const
-		{ return (ft::make_pair(this->lower_bound(k), this->upper_bound(k))); };
+		{ return (ft::make_pair(this->tree_.lower_bound(k), this->tree_.upper_bound(k))); };
 		
 		pair<iterator, iterator> equal_range (const key_type &k)
-		{ return (ft::make_pair(this->lower_bound(k), this->upper_bound(k))); };
+		{ return (ft::make_pair(this->tree_.lower_bound(k), this->tree_.upper_bound(k))); };
 
 		// Allocator: get_allocator
 		allocator_type get_allocator() const 

@@ -33,8 +33,9 @@ namespace ft
 		map_iterator	operator++(int)							{ map_iterator temp(*this); ++(*this); return (temp); };		// post-increment
 		map_iterator&	operator--()							{ this->it_ = predecessor(this->it_); return (*this); };		// pre-decrement
 		map_iterator	operator--(int)							{ map_iterator temp(*this); --(*this); return (temp); };		// post-decrement
-		pointer			operator->()							{ return (&(operator*())); };
+		pointer			operator->() const						{ return (&(operator*())); };
 		// reference		operator[]( difference_type n ) const	{ return (*(this->it_ + n)); };
+	
 	};
 	
 	template <class Tp, class node_pointer>

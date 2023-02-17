@@ -20,8 +20,7 @@ int main()
 	it = test.begin();
 	re_it = test.rbegin();
 	// 터져야하는데 안터짐
-	// re_it = test.rend();
-	// std::cout << "re_it : " << re_it->second << std::endl;
+	std::cout << "re_it : " << re_it->second << std::endl;
 
 	while (it != test.end())
 	{
@@ -35,18 +34,28 @@ int main()
 
 
 	std::cout << "========================" << std::endl;
-	// re_it = test.rend();
-	// re_it++;
+	
 	std::cout << "re_it : " << re_it->second << std::endl;
 
-	// while (re_it != test.rend())
-	// {
-	// 	std::cout << "re_it : " << re_it->second << std::endl;
-	// 	--re_it;
-	// }
+	while (re_it != test.rend())
+	{
+		std::cout << "re_it : " << re_it->second << std::endl;
+		++re_it;
+	}
+	
+	std::cout << "========================" << std::endl;
+	
+	--re_it;
+	std::cout << "re_b : " << test.rbegin()->second << std::endl;
+	while (re_it != test.rbegin())
+	{
+		std::cout << "re_it : " << re_it->second << std::endl;
+		--re_it;
+	}
+	
 
-	// std::cout << "========================" << std::endl;
-	// 	std::cout << "re_it[] : " << re_it['b'].second << std::endl;
-	// 	std::cout << "re_it[] : " << re_it['e'].second << std::endl;
+	std::cout << "========================" << std::endl;
+	std::cout << "test[] : " << test['b'] << std::endl;
+	std::cout << "test[] : " << test['e'] << std::endl;
 
 }

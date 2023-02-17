@@ -70,7 +70,7 @@ namespace ft
 
 	public:
 		tree(const Compare &compare = Compare(), const allocator_type& alloc = allocator_type())
-			: size_(0), comp_(compare)
+			: comp_(compare), size_(0)
 		{
 			this->alloc_ = alloc;
 			this->end_ = this->_make_node(value_type());
@@ -259,9 +259,9 @@ namespace ft
 		{
 			if (root == NULL)
 				return (NULL);
-			else if (this->comp_(key.first, root->key.first))
+			else if (this->comp_(key.first, root->pair_data_.first))
 				root->left_ = _remove(root->left_, key);
-			else if (this->comp_(root->key.first, key.first))
+			else if (this->comp_(root->pair_data_.first, key.first))
 				root->right_ = _remove(root->right_, key);
 			else
 			{
@@ -295,8 +295,8 @@ namespace ft
 				else
 				{
 					node_type_pointer temp = _tree_min(root->right_);
-					value_type p = temp->key;
-					root->right_ = _remove(root->right_ , temp->key);
+					value_type p = temp->pair_data_;
+					root->right_ = _remove(root->right_ , temp->pair_data_);
 					this->alloc_.construct(root, p);
 				}
 			}
@@ -387,9 +387,9 @@ namespace ft
 		{
 			node_type_pointer node = get_min();
 
-			while (!this->_comp(val, node->key.first))
+			while (!this->comp_(val, node->pair_data_.first))
 			{
-				if (val == node->key.first)
+				if (val == node->pair_data_.first)
 					break;
 				node = successor(node);
 				if (node == NULL || node == this->end_)
@@ -402,7 +402,7 @@ namespace ft
 		{
 			node_type_pointer node = get_min();
 
-			while (!this->_comp(val, node->key.first))
+			while (!this->comp_(val, node->pair_data_.first))
 			{
 				node = successor(node);
 				if (node == NULL || node == this->end_)
@@ -460,14 +460,10 @@ namespace ft
 	template<typename node_type_pointer>
 	node_type_pointer _tree_max(node_type_pointer temp)
 	{
-		std::cout << "tree_max out : temp : " << temp->pair_data_.second << std::endl;
 		while (temp->right_ != NULL)
 		{
-			std::cout << "temp : " << temp->pair_data_.second << std::endl;
 			temp = temp->right_;
-			std::cout << "temp->right_ : " << temp->pair_data_.second << std::endl;
 		}
-			std::cout << "return : " << temp->pair_data_.second << std::endl;
 		return (temp);
 	};
 
@@ -512,7 +508,6 @@ namespace ft
 	template<class node_type_pointer>
 	node_type_pointer predecessor(node_type_pointer node)
 	{
-		std::cout << "node : " << node->pair_data_.second << std::endl;
 		if (node->left_)
 			return (_tree_max(node->left_));
 

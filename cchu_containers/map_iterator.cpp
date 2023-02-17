@@ -8,9 +8,9 @@ using namespace std;
 
 int main()
 {
-	ft::Map<char, int> test;
-	ft::Map<char, int>::iterator it;
-	// ft::Map<char, int>::reverse_iterator re_it;
+	ft::map<char, int> test;
+	ft::map<char, int>::iterator it;
+	// ft::map<char, int>::reverse_iterator re_it;
 
 	test.insert(ft::make_pair('a', 1));
 	test.insert(ft::make_pair('b', 2));

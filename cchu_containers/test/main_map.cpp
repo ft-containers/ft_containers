@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_map.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skybt <skybt@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hjeong <hjeong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 11:26:16 by skybt             #+#    #+#             */
-/*   Updated: 2020/08/08 12:39:12 by skybt            ###   ########.fr       */
+/*   Updated: 2023/02/17 12:22:58 by hjeong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void test_simple_insert()
 {
-    ft::Map<int, int> map;
+    ft::map<int, int> map;
 
     map.insert(ft::make_pair(0, 2));
     assert(map.size() == 1);
@@ -31,7 +31,7 @@ static void test_simple_insert()
 
 static void test_accessors()
 {
-    ft::Map<int, int> map;
+    ft::map<int, int> map;
 
     assert(map.empty());
     assert(map.size() == 0);
@@ -70,7 +70,7 @@ static void test_accessors()
 
 static void test_index()
 {
-    ft::Map<int, int> map;
+    ft::map<int, int> map;
 
     assert(map.empty());
     assert(map.size() == 0);
@@ -112,14 +112,14 @@ static void test_index()
 
 static void test_constructors()
 {
-    ft::Map<int, int> map;
+    ft::map<int, int> map;
     map[0] = 50;
     map[90] = 5;
     map[2] = 80;
 
     assert(map.size() == 3);
 
-    ft::Map<int, int> cpy;
+    ft::map<int, int> cpy;
     assert(cpy.size() == 0);
 
     cpy = map;
@@ -141,7 +141,7 @@ static void test_constructors()
     assert(map.size() == 4);
     assert(cpy.size() == 5);
 
-    ft::Map<int, int> cpy2(cpy);
+    ft::map<int, int> cpy2(cpy);
 
     assert(cpy2.size() == 5);
     assert(cpy[5] == 80);
@@ -150,12 +150,12 @@ static void test_constructors()
 
 static void test_iterators()
 {
-    ft::Map<int, int> map;
+    ft::map<int, int> map;
     map[0] = 50;
     map[90] = 5;
     map[2] = 80;
 
-    ft::Map<int, int>::iterator ite = map.begin();
+    ft::map<int, int>::iterator ite = map.begin();
     assert(ite->first == 0);
     assert(ite->second == 50);
     assert((++ite)->first == 2);
@@ -170,9 +170,9 @@ static void test_iterators()
     assert(++ite == map.end());
     assert(--ite != map.end());
 
-    const ft::Map<int, int> &map2 = map;
+    const ft::map<int, int> &map2 = map;
 
-    ft::Map<int, int>::const_iterator ite2 = map2.end();
+    ft::map<int, int>::const_iterator ite2 = map2.end();
     --ite2;
 
     assert(ite2->first == 90);
@@ -187,12 +187,12 @@ static void test_iterators()
 
 static void test_reverse_iterators()
 {
-    ft::Map<int, int> map;
+    ft::map<int, int> map;
     map[0] = 50;
     map[90] = 5;
     map[2] = 80;
 
-    ft::Map<int, int>::reverse_iterator ite = map.rbegin();
+    ft::map<int, int>::reverse_iterator ite = map.rbegin();
     assert(ite->first == 90);
     assert(ite->second == 5);
     assert((++ite)->first == 2);
@@ -207,9 +207,9 @@ static void test_reverse_iterators()
     assert(++ite == map.rend());
     assert(--ite != map.rend());
 
-    const ft::Map<int, int> &map2 = map;
+    const ft::map<int, int> &map2 = map;
 
-    ft::Map<int, int>::const_reverse_iterator ite2 = map2.rend();
+    ft::map<int, int>::const_reverse_iterator ite2 = map2.rend();
     --ite2;
 
     assert(ite2->first == 0);
@@ -224,7 +224,7 @@ static void test_reverse_iterators()
 
 static void test_insert()
 {
-    ft::Map<int, int> map;
+    ft::map<int, int> map;
     map[0] = 50;
     map[90] = 5;
     map[2] = 80;
@@ -257,11 +257,11 @@ static void test_insert()
 
 static void test_cmp()
 {
-    ft::Map<int, int> map;
+    ft::map<int, int> map;
     map[0] = 50;
     map[90] = 5;
 
-    ft::Map<int, int> map2;
+    ft::map<int, int> map2;
     map2[0] = 50;
     map2[90] = 5;
     map2[2] = 80;
@@ -289,12 +289,12 @@ static void test_cmp()
 
 static void test_swap()
 {
-    ft::Map<int, int> map;
+    ft::map<int, int> map;
     map[10] = 96;
     map[36] = 9;
     map[8] = 8;
 
-    ft::Map<int, int> map2;
+    ft::map<int, int> map2;
     map2[0] = 50;
     map2[90] = 5;
 
@@ -329,7 +329,7 @@ static void test_swap()
 
 static void test_count_find()
 {
-    ft::Map<int, int> map;
+    ft::map<int, int> map;
     map[10] = 96;
     map[36] = 9;
     map[8] = 8;
@@ -348,12 +348,12 @@ static void test_count_find()
 
 static void test_range()
 {
-    ft::Map<int, int> map;
+    ft::map<int, int> map;
     map[10] = 96;
     map[36] = 9;
     map[8] = 8;
 
-    ft::Map<int, int>::iterator ite = map.begin();
+    ft::map<int, int>::iterator ite = map.begin();
     ++ite;
 
     assert(map.lower_bound(5) == map.begin());
@@ -382,7 +382,7 @@ static void test_range()
     assert(map.upper_bound(10) == ite);
     assert(map.upper_bound(30) == ite);
 
-    typedef typename ft::Map<int, int>::iterator iter;
+    typedef typename ft::map<int, int>::iterator iter;
     ft::Pair<iter, iter> range;
 
     range = map.equal_range(8);
