@@ -49,7 +49,7 @@ namespace ft
 		typedef pointer										iterator;
 		typedef const_pointer								const_iterator;
 
-		// 함수와 변수를 구분하기 위하여 맨 뒤에 는더바맨.
+		// 함수와 변수를 구분하기 위하여 맨 뒤에는 언더바 맨.
 		iterator						begin_;
 		iterator						end_;
 		// end_cap_.first는 iterator, end_cap_.second는 allocator

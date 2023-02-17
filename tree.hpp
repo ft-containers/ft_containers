@@ -4,6 +4,8 @@
 #include <memory>
 #include "map_iterator.hpp"
 
+#include <iostream>
+
 namespace ft
 {
 	template <typename Val>
@@ -332,6 +334,7 @@ namespace ft
 			{
 				++this->size_;
 				this->root_ = _insert(this->root_, newnode);
+				this->end_->left_ = this->root_; // end_ 추가
 			}
 			return (newnode);
 		};
@@ -357,6 +360,7 @@ namespace ft
 		void	remove(Val key)
 		{
 			this->root_ = _remove(this->root_, key);
+			this->end_->left_ = root_; // end_ 추가
 		};
 
 		void	swap(tree &x)
@@ -456,8 +460,14 @@ namespace ft
 	template<typename node_type_pointer>
 	node_type_pointer _tree_max(node_type_pointer temp)
 	{
+		std::cout << "tree_max out : temp : " << temp->pair_data_.second << std::endl;
 		while (temp->right_ != NULL)
+		{
+			std::cout << "temp : " << temp->pair_data_.second << std::endl;
 			temp = temp->right_;
+			std::cout << "temp->right_ : " << temp->pair_data_.second << std::endl;
+		}
+			std::cout << "return : " << temp->pair_data_.second << std::endl;
 		return (temp);
 	};
 
@@ -476,9 +486,33 @@ namespace ft
 		return (temp);
 	};
 
+//cchu ver for us
+	// template<class node_type_pointer>
+	// node_type_pointer predecessor(node_type_pointer node)
+	// {
+	// 	if (node->left_)
+	// 		return (_tree_max(node->left_));
+	// 	node_type_pointer temp;
+	// 	// do
+	// 	// {
+	// 	// 	temp = node;
+	// 	// 	node = node->parent_;
+	// 	// } while (node && temp == node->left_);
+	// 	// return (node);
+	// 	while (temp && temp->left_ == node)
+	// 	{
+	// 		node = temp;
+	// 		temp = temp->parent_;
+	// 	}
+	// 	if (temp == NULL)
+	// 		return (node);
+	// 	return (temp);
+	// };
+
 	template<class node_type_pointer>
 	node_type_pointer predecessor(node_type_pointer node)
 	{
+		std::cout << "node : " << node->pair_data_.second << std::endl;
 		if (node->left_)
 			return (_tree_max(node->left_));
 
@@ -492,5 +526,27 @@ namespace ft
 			return (node);
 		return (temp);
 	};
+
+//cchu
+		// _Self &operator--()
+		// {
+		// 	if (_n->left)
+		// 	{
+		// 		_n = _n->left;
+		// 		while (_n && _n->right)
+		// 			_n = _n->right;
+		// 	}
+		// 	else
+		// 	{
+		// 		_node *tmp;
+		// 		do
+		// 		{
+		// 			tmp = _n;
+		// 			_n = _n->parent;
+		// 		} while (_n && tmp == _n->left);
+		// 	}
+		// 	return *this;
+		// }
+
 }
 #endif
