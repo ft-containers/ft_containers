@@ -1553,6 +1553,7 @@ void testModifiers()
         //           << "m1: " << m1 << "m2: " << m2 << "ref: " << ref
         //           << "\niter: " << *iter << '\n';
 
+iter->secon
         cond = cond && ref.first == ft_ref.first && ref.second == ft_ref.second && iter->second == ft_iter->second && iter->first == ft_iter->first && m1.size() == ft_m1.size() && m2.size() && ft_m2.size();
 
         m1.swap(m2);

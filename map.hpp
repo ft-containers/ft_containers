@@ -140,8 +140,11 @@ namespace ft
 		{
 			while (first != last)
 			{
-				this->tree_.insert(*first);
+				// this->tree_.insert(*first))->second
+				std::cout << (this->tree_.insert(*first))->pair_data_.second << std::endl;
+				std::cout << "curr : " << first->second << std::endl;
 				first++;
+				std::cout << "curr++ : " << first->second << std::endl;
 			};
 		};
 
