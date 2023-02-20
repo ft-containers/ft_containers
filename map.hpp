@@ -76,12 +76,14 @@ namespace ft
 		explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):
 			tree_(comp, alloc), alloc_(alloc), comp_(comp) {};
 		template <class InputIterator>
+		// map(){}
 		map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):
 			tree_(comp, alloc), alloc_(alloc), comp_(comp) { insert(first, last); };
 		map (const map& x) { *this = x; };
 
 		// destructor
-		~map() { this->tree_.clear(); };
+		~map(){};
+			// this->tree_.clear(); };
 		// operator=
 		map& operator= (const map& x)
 		{
@@ -127,13 +129,8 @@ namespace ft
 
 		iterator insert (iterator position, const value_type& val)
 		{
-			node_type_pointer node = position.base();
-			// if 부분을 없애면 잘 돌아간다
-			if (val.first > predecessor(node)->pair_data_.first && val.first < successor(node)->pair_data_.first)
-				position = iterator(this->tree_.insert_in_position(node, val));
-			else
-				position = insert(val).first;
-			return (position);
+			(void)position;
+			return (insert(val).first);
 		};
 
 		template <typename InputIterator>
@@ -141,11 +138,8 @@ namespace ft
 		{
 			while (first != last)
 			{
-				// this->tree_.insert(*first))->second
-				std::cout << (this->tree_.insert(*first))->pair_data_.second << std::endl;
-				std::cout << "curr : " << first->second << std::endl;
+				this->tree_.insert(*first);
 				first++;
-				std::cout << "curr++ : " << first->second << std::endl;
 			};
 		};
 
@@ -154,8 +148,12 @@ namespace ft
 		
 		size_type erase (const key_type& k)
 		{
+			iterator	node_to_erase = find(k);
+			if (node_to_erase == end())
+				return (0);
+
 			size_type s = size();
-			this->tree_.remove(*find(k));
+			this->tree_.remove(*node_to_erase);
 			return (s - size());
 		};
 		

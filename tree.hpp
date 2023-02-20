@@ -76,7 +76,13 @@ namespace ft
 			this->end_ = this->_make_node(value_type());
 			this->root_ = this->end_;
 		};
-		~tree() {};
+		//
+		~tree()
+		{
+			this->clear();
+			this->alloc_.destroy(end_);
+			this->alloc_.deallocate(end_, 1);
+		};
 
 		// Iterators
 		iterator		begin()					{ return (iterator(get_min())); };
@@ -270,6 +276,7 @@ namespace ft
 					this->alloc_.destroy(root);
 					this->alloc_.deallocate(root, 1);
 					root = NULL;
+					--size_;
 					return (root);
 				}
 				else if (root->left_ == NULL)
@@ -280,6 +287,7 @@ namespace ft
 					this->alloc_.destroy(temp);
 					this->alloc_.deallocate(temp, 1);
 					temp = NULL;
+					--size_;
 					return (root);
 				}
 				else if (root->right_ == NULL)
@@ -290,6 +298,7 @@ namespace ft
 					this->alloc_.destroy(temp);
 					this->alloc_.deallocate(temp, 1);
 					temp = NULL;
+					--size_;
 					return (root);
 				}
 				else
@@ -339,23 +348,23 @@ namespace ft
 			return (newnode);
 		};
 
-		node_type_pointer	insert_in_position(node_type_pointer position, Val key)
-		{
-			node_type_pointer newnode = _make_node(key);
-			if (position == this->end_)
-			{
-				position = newnode;
-				position->parent_ = this->end_;
-				this->end_->left_ = position;
-				++this->size_;
-			}
-			else
-			{
-				++this->size_;
-				position = _insert(position, newnode);
-			}
-			return (newnode);
-		};
+		// node_type_pointer	insert_in_position(node_type_pointer position, Val key)
+		// {
+		// 	node_type_pointer newnode = _make_node(key);
+		// 	if (position == this->end_)
+		// 	{
+		// 		position = newnode;
+		// 		position->parent_ = this->end_;
+		// 		this->end_->left_ = position;
+		// 		++this->size_;
+		// 	}
+		// 	else
+		// 	{
+		// 		++this->size_;
+		// 		position = _insert(position, newnode);
+		// 	}
+		// 	return (newnode);
+		// };
 
 		void	remove(Val key)
 		{

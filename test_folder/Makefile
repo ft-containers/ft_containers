@@ -1,10 +1,10 @@
 NAME = TEST
 
-CXX = c++ -g3 -fsanitize=address
+CXX = c++ -g3 #-fsanitize=address
 # CXXFLAGS = -Wall -Wextra -Werror -g3
 # -std=c++98 -pedantic
 
-SRCS = map_test.cpp 
+SRCS = map_unit_const.cpp
 #		enable_if.cpp 
 		
 
