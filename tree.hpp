@@ -61,17 +61,32 @@ namespace ft
 		typedef ft::reverse_iterator<const_iterator>				const_reverse_iterator;
 
 	private:
+		////
+		template <typename Com>
+		bool set_comp_factor()
+		{
+			typedef typename Com::first_argument_type	first_argument_type;
+			typedef typename Com::second_argument_type	second_argument_type;
+			typedef typename Com::result_type			result_type;
+			if (typeid(result_type) == typeid(bool))
+				return (true);
+			else
+				return (false);
+		}
+
 		// Declare all attributes needed in Tree
 		allocator_node		alloc_;
 		Compare				comp_;
 		node_type_pointer	root_;
 		node_type_pointer	end_;
 		int					size_;
+		bool				comp_factor;
 
 	public:
 		tree(const Compare &compare = Compare(), const allocator_type& alloc = allocator_type())
 			: comp_(compare), size_(0)
 		{
+			comp_factor = set_comp_factor<Compare>();
 			this->alloc_ = alloc;
 			this->end_ = this->_make_node(value_type());
 			this->root_ = this->end_;
@@ -242,7 +257,8 @@ namespace ft
 		{
 			if (temp == NULL || temp == this->end_)
 				return (new_node);
-			if (!this->comp_(temp->pair_data_.first, new_node->pair_data_.first))
+			if (!this->comp_(temp->pair_data_.first, new_node->pair_data_.first)
+				|| comp_factor == false)
 			{
 				temp->left_ = _insert(temp->left_, new_node);
 				if (temp->left_ == new_node)
@@ -281,23 +297,31 @@ namespace ft
 				}
 				else if (root->left_ == NULL)
 				{
-					node_type_pointer	temp = root;
-					root = root->right_;
-					root->parent_ = temp->parent_;
-					this->alloc_.destroy(temp);
-					this->alloc_.deallocate(temp, 1);
-					temp = NULL;
+					node_type_pointer	old_root = root;
+					root = old_root->right_;
+					root->parent_ = old_root->parent_;
+					if (old_root == old_root->parent_->left_)
+						old_root->parent_->left_ = root;
+					else
+						old_root->parent_->right_ = root;
+					this->alloc_.destroy(old_root);
+					this->alloc_.deallocate(old_root, 1);
+					old_root = NULL;
 					--size_;
 					return (root);
 				}
 				else if (root->right_ == NULL)
 				{
-					node_type_pointer	temp = root;
-					root = root->left_;
-					root->parent_ = temp->parent_;
-					this->alloc_.destroy(temp);
-					this->alloc_.deallocate(temp, 1);
-					temp = NULL;
+					node_type_pointer	old_root = root;
+					root = old_root->left_;
+					root->parent_ = old_root->parent_;
+					if (old_root == old_root->parent_->left_)
+						old_root->parent_->left_ = root;
+					else
+						old_root->parent_->right_ = root;
+					this->alloc_.destroy(old_root);
+					this->alloc_.deallocate(old_root, 1);
+					old_root = NULL;
 					--size_;
 					return (root);
 				}
@@ -348,28 +372,12 @@ namespace ft
 			return (newnode);
 		};
 
-		// node_type_pointer	insert_in_position(node_type_pointer position, Val key)
-		// {
-		// 	node_type_pointer newnode = _make_node(key);
-		// 	if (position == this->end_)
-		// 	{
-		// 		position = newnode;
-		// 		position->parent_ = this->end_;
-		// 		this->end_->left_ = position;
-		// 		++this->size_;
-		// 	}
-		// 	else
-		// 	{
-		// 		++this->size_;
-		// 		position = _insert(position, newnode);
-		// 	}
-		// 	return (newnode);
-		// };
-
 		void	remove(Val key)
 		{
 			this->root_ = _remove(this->root_, key);
 			this->end_->left_ = root_; // end_ 추가
+			if (this->size() == 0)
+				this->root_ = this->end_;
 		};
 
 		void	swap(tree &x)
