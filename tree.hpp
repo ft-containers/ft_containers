@@ -61,18 +61,6 @@ namespace ft
 		typedef ft::reverse_iterator<const_iterator>				const_reverse_iterator;
 
 	private:
-		////
-		template <typename Com>
-		bool set_comp_factor()
-		{
-			typedef typename Com::first_argument_type	first_argument_type;
-			typedef typename Com::second_argument_type	second_argument_type;
-			typedef typename Com::result_type			result_type;
-			if (typeid(result_type) == typeid(bool))
-				return (true);
-			else
-				return (false);
-		}
 
 		// Declare all attributes needed in Tree
 		allocator_node		alloc_;
@@ -82,11 +70,21 @@ namespace ft
 		int					size_;
 		bool				comp_factor;
 
+		bool set_comp_factor()
+		{
+			Val	temp;
+
+			if (typeid(comp_(temp.first, temp.first)) == typeid(bool))
+				return (true);
+			else
+				return (false);
+		}
+
 	public:
 		tree(const Compare &compare = Compare(), const allocator_type& alloc = allocator_type())
 			: comp_(compare), size_(0)
 		{
-			comp_factor = set_comp_factor<Compare>();
+			comp_factor = set_comp_factor();
 			this->alloc_ = alloc;
 			this->end_ = this->_make_node(value_type());
 			this->root_ = this->end_;

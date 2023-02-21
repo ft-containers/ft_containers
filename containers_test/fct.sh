@@ -15,7 +15,7 @@ srcs="srcs"
 
 CC="clang++"
 CFLAGS="-Wall -Wextra -Werror -std=c++98"
-# CFLAGS+=" -fsanitize=address -g3"
+CFLAGS+=" -fsanitize=address -g3"
 
 ft_compile_output="/dev/null"
 std_compile_output="/dev/null"
@@ -53,7 +53,7 @@ getEmoji () {
 	case $1 in
 		0) emoji="${GREEN}✅";;
 		1) emoji="${RED}❌";;
-		2) emoji="${YELLOW}⚠️ ";;
+		2) emoji="${YELLOW}🥳 ";;
 	esac
 	printf "${BOLD}${emoji}${EOC}"
 }
