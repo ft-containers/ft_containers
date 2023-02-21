@@ -135,7 +135,7 @@ namespace ft
 			this->alloc_.deallocate(*node, 1);
 			*node = NULL;
 		};
-		
+
 		// exterminate subtree under the node
 		void	_destroy(node_type_pointer node)
 		{
@@ -143,8 +143,7 @@ namespace ft
 			{
 				_destroy(node->left_);
 				_destroy(node->right_);
-				this->alloc_.destroy(node);
-				this->alloc_.deallocate(node, 1);
+				_delete_node(&node);
 			}
 		};
 
@@ -289,9 +288,7 @@ namespace ft
 			{
 				if (root->left_ == NULL && root->right_ == NULL)
 				{
-					this->alloc_.destroy(root);
-					this->alloc_.deallocate(root, 1);
-					root = NULL;
+					_delete_node(&root);
 					--size_;
 					return (root);
 				}
@@ -304,9 +301,7 @@ namespace ft
 						old_root->parent_->left_ = root;
 					else
 						old_root->parent_->right_ = root;
-					this->alloc_.destroy(old_root);
-					this->alloc_.deallocate(old_root, 1);
-					old_root = NULL;
+					_delete_node(&old_root);
 					--size_;
 					return (root);
 				}
@@ -319,9 +314,7 @@ namespace ft
 						old_root->parent_->left_ = root;
 					else
 						old_root->parent_->right_ = root;
-					this->alloc_.destroy(old_root);
-					this->alloc_.deallocate(old_root, 1);
-					old_root = NULL;
+					_delete_node(&old_root);
 					--size_;
 					return (root);
 				}
