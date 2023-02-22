@@ -254,8 +254,8 @@ namespace ft
 		{
 			if (temp == NULL || temp == this->end_)
 				return (new_node);
-			if (!this->comp_(temp->pair_data_.first, new_node->pair_data_.first)
-				|| comp_factor == false)
+			if ((!this->comp_(temp->pair_data_.first, new_node->pair_data_.first)
+				|| comp_factor == false))
 			{
 				temp->left_ = _insert(temp->left_, new_node);
 				if (temp->left_ == new_node)
@@ -347,6 +347,8 @@ namespace ft
 	public:
 		node_type_pointer	insert(value_type key)
 		{
+			if (this->_search(this->root_, key.first) != this->end_)
+				return (NULL);
 			node_type_pointer newnode = _make_node(key);
 			if (this->root_ == this->end_)
 			{
@@ -357,8 +359,8 @@ namespace ft
 			}
 			else
 			{
-				++this->size_;
 				this->root_ = _insert(this->root_, newnode);
+				++this->size_;
 				this->end_->left_ = this->root_; // end_ 추가
 			}
 			return (newnode);

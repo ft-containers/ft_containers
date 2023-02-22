@@ -139,7 +139,7 @@ namespace ft
 			while (first != last)
 			{
 				this->tree_.insert(*first);
-				first++;
+				++first;
 			};
 		};
 
