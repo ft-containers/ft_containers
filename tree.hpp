@@ -288,7 +288,8 @@ namespace ft
 				{
 					_delete_node(&root);
 					--size_;
-					return (root);
+					return (NULL);
+					// return (root);
 				}
 				else if (root->left_ == NULL)
 				{
@@ -318,9 +319,9 @@ namespace ft
 				}
 				else
 				{
-					node_type_pointer temp = _tree_min(root->right_);
+					node_type_pointer temp = _tree_max(root->left_);
 					value_type p = temp->pair_data_;
-					root->right_ = _remove(root->right_ , temp->pair_data_);
+					root->left_ = _remove(root->left_ , temp->pair_data_);
 					this->alloc_.construct(root, p);
 				}
 			}

@@ -159,7 +159,7 @@ namespace ft
 		
 		void erase (iterator first, iterator last)
 		{
-			iterator position;
+			iterator	position;
 			while(first != last)
 			{
 				position = first;
