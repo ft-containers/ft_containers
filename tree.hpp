@@ -525,8 +525,8 @@ namespace ft
 			node = temp;
 			temp = temp->parent_;
 		}
-		if (temp == NULL)
-			return (node);
+		// if (temp == NULL)
+			// return (node);
 		return (temp);
 	};
 

@@ -163,7 +163,7 @@ namespace ft
 			while(first != last)
 			{
 				position = first;
-				first++;
+				++first;
 				erase(position);
 			}
 		};
