@@ -38,23 +38,43 @@ namespace ft
 	
 	};
 	
-	template <class Tp, class node_pointer>
-	bool operator== (const map_iterator<Tp, node_pointer>& x, const map_iterator<Tp, node_pointer>& y)
+	// template <class Tp, class node_pointer>
+	// bool operator== (const map_iterator<Tp, node_pointer>& x, const map_iterator<Tp, node_pointer>& y)
+	// 	{ return (x.base() == y.base()); };
+	// template <class Tp, class node_pointer>
+	// bool operator!= (const map_iterator<Tp, node_pointer>& x, const map_iterator<Tp, node_pointer>& y)
+	// 	{ return (x.base() != y.base()); };
+	// template <class Tp, class node_pointer>
+	// bool operator<  (const map_iterator<Tp, node_pointer>& x, const map_iterator<Tp, node_pointer>& y)
+	// 	{ return (x.base() < y.base()); };
+	// template <class Tp, class node_pointer>
+	// bool operator<= (const map_iterator<Tp, node_pointer>& x, const map_iterator<Tp, node_pointer>& y)
+	// 	{ return (x.base() <= y.base()); };
+	// template <class Tp, class node_pointer>
+	// bool operator>  (const map_iterator<Tp, node_pointer>& x, const map_iterator<Tp, node_pointer>& y)
+	// 	{ return (x.base() > y.base()); };
+	// template <class Tp, class node_pointer>
+	// bool operator>=  (const map_iterator<Tp, node_pointer>& x, const map_iterator<Tp, node_pointer>& y)
+	// 	{ return (x.base() >= y.base()); };
+
+	//이게 맞아!
+	template <class Tp, class Up, class node_pointer>
+	bool operator==(const map_iterator<Tp, node_pointer>& x, const map_iterator<Up, node_pointer>& y)
 		{ return (x.base() == y.base()); };
-	template <class Tp, class node_pointer>
-	bool operator!= (const map_iterator<Tp, node_pointer>& x, const map_iterator<Tp, node_pointer>& y)
+	template <class Tp, class Up, class node_pointer>
+	bool operator!=(const map_iterator<Tp, node_pointer>& x, const map_iterator<Up, node_pointer>& y)
 		{ return (x.base() != y.base()); };
-	template <class Tp, class node_pointer>
-	bool operator<  (const map_iterator<Tp, node_pointer>& x, const map_iterator<Tp, node_pointer>& y)
+	template <class Tp, class Up, class node_pointer>
+	bool operator< (const map_iterator<Tp, node_pointer>& x, const map_iterator<Up, node_pointer>& y)
 		{ return (x.base() < y.base()); };
-	template <class Tp, class node_pointer>
-	bool operator<= (const map_iterator<Tp, node_pointer>& x, const map_iterator<Tp, node_pointer>& y)
+	template <class Tp, class Up, class node_pointer>
+	bool operator<=(const map_iterator<Tp, node_pointer>& x, const map_iterator<Up, node_pointer>& y)
 		{ return (x.base() <= y.base()); };
-	template <class Tp, class node_pointer>
-	bool operator>  (const map_iterator<Tp, node_pointer>& x, const map_iterator<Tp, node_pointer>& y)
+	template <class Tp, class Up, class node_pointer>
+	bool operator> (const map_iterator<Tp, node_pointer>& x, const map_iterator<Up, node_pointer>& y)
 		{ return (x.base() > y.base()); };
-	template <class Tp, class node_pointer>
-	bool operator>=  (const map_iterator<Tp, node_pointer>& x, const map_iterator<Tp, node_pointer>& y)
+	template <class Tp, class Up, class node_pointer>
+	bool operator>= (const map_iterator<Tp, node_pointer>& x, const map_iterator<Up, node_pointer>& y)
 		{ return (x.base() >= y.base()); };
 
 };
