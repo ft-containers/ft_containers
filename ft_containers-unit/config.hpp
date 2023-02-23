@@ -5,8 +5,8 @@
 /*				or comment #include				  */
 /*		if you haven't yet some container		  */
 /**************************************************/
-// #define VECTOR			"../../../vector.hpp"
-// #define STACK			"../../../Stack.hpp"
+#define VECTOR			"../../../vector.hpp"
+#define STACK			"../../../Stack.hpp"
 #define MAP			  	"../../../map.hpp"
 // #define SET			  	"../../../Set.hpp"
 // #define UTILITIES		"../../../Utility.hpp"
@@ -17,8 +17,8 @@
 /**************************************************/
 /*		Change template names of your classes	  */
 /**************************************************/
-// #define	_vector 			ft::vector
-// #define	_stack	 			ft::Stack
+#define	_vector 			ft::vector
+#define	_stack	 			ft::Stack
 #define	_map 				ft::map
 // #define	_set	 			ft::Set
 #define	_is_integral 		ft::is_integral
