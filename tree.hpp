@@ -43,7 +43,6 @@ namespace ft
 		// 테스터로 다 완성 해보고 잘 되면 node_type_pointer->node_type으로 바꿔버리기
 		// 위의 node_pointer와 동일
 		typedef tree_node<value_type>												node_type;
-		typedef node_type*															node_type_pointer;
 
 	public:
 		// typedef member Types of Tree iterator / typedef of Allocator = pair<>
@@ -55,20 +54,20 @@ namespace ft
 		typedef typename allocator_type::size_type					size_type;
 		typedef typename value_type::first_type						key_type;
 		typedef typename value_type::second_type					mapped_type;
-		typedef ft::map_iterator<pointer, node_type_pointer>		iterator;
-		typedef ft::map_iterator<const_pointer, node_type_pointer>	const_iterator;
+		typedef ft::map_iterator<pointer, node_type>		iterator;
+		typedef ft::map_iterator<const_pointer, node_type>	const_iterator;
 		typedef ft::reverse_iterator<iterator>						reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator>				const_reverse_iterator;
 
 	private:
 
 		// Declare all attributes needed in Tree
-		allocator_node		alloc_;
-		Compare				comp_;
-		node_type_pointer	root_;
-		node_type_pointer	end_;
-		int					size_;
-		bool				comp_factor;
+		allocator_node	alloc_;
+		Compare			comp_;
+		node_type*			root_;
+		node_type*			end_;
+		int				size_;
+		bool			comp_factor;
 
 		bool set_comp_factor()
 		{
@@ -111,14 +110,14 @@ namespace ft
 		bool		empty() const 		{ return (this->size_ == 0); };
 		size_type 	size() const		{ return (this->size_); };
 		size_type 	max_size() const	//min's parameter 어떤 의미인지 알기!
-		{ return (std::min<size_type>(std::numeric_limits<size_type>::max() / sizeof(node_type_pointer), \
+		{ return (std::min<size_type>(std::numeric_limits<size_type>::max() / sizeof(node_type*), \
 										std::numeric_limits<difference_type>::max())); };
 
 	private:
 		// private func
-		node_type_pointer _make_node(value_type key)
+		node_type* _make_node(value_type key)
 		{
-			node_type_pointer newnode = this->alloc_.allocate(1);
+			node_type* newnode = this->alloc_.allocate(1);
 			this->alloc_.construct(newnode, key);
 			newnode->height_ = 1;
 			newnode->parent_ = NULL;
@@ -127,7 +126,7 @@ namespace ft
 			return (newnode);
 		};
 
-		void _delete_node(node_type_pointer* node)
+		void _delete_node(node_type** node)
 		{
 			this->alloc_.destroy(*node);
 			this->alloc_.deallocate(*node, 1);
@@ -135,7 +134,7 @@ namespace ft
 		};
 
 		// exterminate subtree under the node
-		void	_destroy(node_type_pointer node)
+		void	_destroy(node_type* node)
 		{
 			if (node != NULL)
 			{
@@ -145,14 +144,14 @@ namespace ft
 			}
 		};
 
-		int	_height(node_type_pointer temp)
+		int	_height(node_type* temp)
 		{
 			if (temp == NULL)
 				return (0);
 			return (temp->height_);
 		};
 
-		int _get_balance_factor(node_type_pointer n)
+		int _get_balance_factor(node_type* n)
 		{
 			if (n == NULL)
 				return 0;
@@ -160,11 +159,11 @@ namespace ft
 		}
 
 		// rebalance
-		node_type_pointer _left_rotate(node_type_pointer x)
+		node_type* _left_rotate(node_type* x)
 		{
-			node_type_pointer y = x->right_;
-			node_type_pointer T2 = y->left_;
-			node_type_pointer p = x->parent_;
+			node_type* y = x->right_;
+			node_type* T2 = y->left_;
+			node_type* p = x->parent_;
 			y->left_ = x;
 			x->right_ = T2;
 			if (p != this->end_)
@@ -183,11 +182,11 @@ namespace ft
 			return y;
 		};
 
-		node_type_pointer _right_rotate(node_type_pointer x)
+		node_type* _right_rotate(node_type* x)
 		{
-			node_type_pointer y = x->left_;
-			node_type_pointer T2 = y->right_;
-			node_type_pointer p = x->parent_;
+			node_type* y = x->left_;
+			node_type* T2 = y->right_;
+			node_type* p = x->parent_;
 			y->right_ = x;
 			x->left_ = T2;
 			if (p != this->end_)
@@ -206,19 +205,19 @@ namespace ft
 			return y;
 		};
 
-		node_type_pointer _right_left_rotate(node_type_pointer node)
+		node_type* _right_left_rotate(node_type* node)
 		{
 			node->right_ = _right_rotate(node->right_);
 			return (_left_rotate(node));
 		};
 
-		node_type_pointer _left_right_rotate(node_type_pointer node)
+		node_type* _left_right_rotate(node_type* node)
 		{
 			node->left_ = _left_rotate(node->left_);
 			return (_right_rotate(node));
 		};
 
-		node_type_pointer	_re_balance(node_type_pointer node)
+		node_type*	_re_balance(node_type* node)
 		{
 			int	balance_factor = _get_balance_factor(node);
 			if (balance_factor > 1)
@@ -238,7 +237,7 @@ namespace ft
 			return (node);
 		};
 		
-		void _reset_height(node_type_pointer temp)
+		void _reset_height(node_type* temp)
 		{
 			if (!temp->left_ && !temp->right_)
 				temp->height_ = 1;
@@ -250,7 +249,7 @@ namespace ft
 				temp->height_ = 1 + std::max(temp->right_->height_, temp->left_->height_);
 		};
 
-		node_type_pointer _insert(node_type_pointer temp, node_type_pointer new_node)
+		node_type* _insert(node_type* temp, node_type* new_node)
 		{
 			if (temp == NULL || temp == this->end_)
 				return (new_node);
@@ -274,7 +273,7 @@ namespace ft
 			return (temp);
 		};
 
-		node_type_pointer	_remove(node_type_pointer root, Val key)
+		node_type*	_remove(node_type* root, Val key)
 		{
 			if (root == NULL)
 				return (NULL);
@@ -293,7 +292,7 @@ namespace ft
 				}
 				else if (root->left_ == NULL)
 				{
-					node_type_pointer	old_root = root;
+					node_type*	old_root = root;
 					root = old_root->right_;
 					root->parent_ = old_root->parent_;
 					if (old_root == old_root->parent_->left_)
@@ -306,7 +305,7 @@ namespace ft
 				}
 				else if (root->right_ == NULL)
 				{
-					node_type_pointer	old_root = root;
+					node_type*	old_root = root;
 					root = old_root->left_;
 					root->parent_ = old_root->parent_;
 					if (old_root == old_root->parent_->left_)
@@ -319,7 +318,7 @@ namespace ft
 				}
 				else
 				{
-					node_type_pointer temp = _tree_max(root->left_);
+					node_type* temp = _tree_max(root->left_);
 					value_type p = temp->pair_data_;
 					root->left_ = _remove(root->left_ , temp->pair_data_);
 					this->alloc_.construct(root, p);
@@ -330,7 +329,7 @@ namespace ft
 			return (root);
 		};
 
-		node_type_pointer _search(node_type_pointer temp, key_type key) const
+		node_type* _search(node_type* temp, key_type key) const
 		{
 			if (temp == NULL)
 				return (this->end_);
@@ -345,11 +344,11 @@ namespace ft
 		};
 
 	public:
-		node_type_pointer	insert(value_type key)
+		node_type*	insert(value_type key)
 		{
 			if (this->_search(this->root_, key.first) != this->end_)
 				return (NULL);
-			node_type_pointer newnode = _make_node(key);
+			node_type* newnode = _make_node(key);
 			if (this->root_ == this->end_)
 			{
 				this->root_ = newnode;
@@ -378,8 +377,8 @@ namespace ft
 		{
 			size_type tmp_size = x.size_;
 			allocator_type tmp_alloc = x.alloc_;
-			node_type_pointer tmp_root = x.root_;
-			node_type_pointer tmp_end = x.end_;
+			node_type* tmp_root = x.root_;
+			node_type* tmp_end = x.end_;
 
 			x.size_ = this->size_;
 			this->size_ = tmp_size;
@@ -394,9 +393,9 @@ namespace ft
 			this->root_ = tmp_root;
 		};
 
-		node_type_pointer lower_bound(key_type val) const
+		node_type* lower_bound(key_type val) const
 		{
-			node_type_pointer node = get_min();
+			node_type* node = get_min();
 
 			while (!this->comp_(val, node->pair_data_.first))
 			{
@@ -409,9 +408,9 @@ namespace ft
 			return (node);
 		};
 
-		node_type_pointer upper_bound(key_type val) const
+		node_type* upper_bound(key_type val) const
 		{
-			node_type_pointer node = get_min();
+			node_type* node = get_min();
 
 			while (!this->comp_(val, node->pair_data_.first))
 			{
@@ -433,25 +432,25 @@ namespace ft
 			}
 		};
 
-		node_type_pointer	get_min() const
+		node_type*	get_min() const
 		{
-			node_type_pointer tmp = this->root_;
+			node_type* tmp = this->root_;
 
 			while (tmp != this->end_ && tmp->left_)
 				tmp = tmp->left_;
 			return (tmp);
 		};
 		
-		node_type_pointer	get_max() const
+		node_type*	get_max() const
 		{
-			node_type_pointer tmp = this->root_;
+			node_type* tmp = this->root_;
 
 			while (tmp->right_ && tmp->right_ != this->end_)
 				tmp = tmp->right_;
 			return (tmp);
 		};
 
-		node_type_pointer search(key_type key) const
+		node_type* search(key_type key) const
 		{
 			if (this->root_ == this->end_)
 				return (this->end_);
@@ -460,16 +459,16 @@ namespace ft
 		};
 	};
 
-	template<typename node_type_pointer>
-	node_type_pointer _tree_min(node_type_pointer temp)
+	template<typename node_type>
+	node_type* _tree_min(node_type* temp)
 	{
 		while (temp->left_ != NULL)
 			temp = temp->left_;
 		return (temp);
 	};
 
-	template<typename node_type_pointer>
-	node_type_pointer _tree_max(node_type_pointer temp)
+	template<typename node_type>
+	node_type* _tree_max(node_type* temp)
 	{
 		while (temp->right_ != NULL)
 		{
@@ -478,13 +477,13 @@ namespace ft
 		return (temp);
 	};
 
-	template<class node_type_pointer>
-	node_type_pointer successor(node_type_pointer node)
+	template<class node_type>
+	node_type* successor(node_type* node)
 	{
 		if (node->right_)
 			return (_tree_min(node->right_));
 
-		node_type_pointer temp = node->parent_;
+		node_type* temp = node->parent_;
 		while (temp && temp->right_ == node)
 		{
 			node = temp;
@@ -493,36 +492,13 @@ namespace ft
 		return (temp);
 	};
 
-//cchu ver for us
-	// template<class node_type_pointer>
-	// node_type_pointer predecessor(node_type_pointer node)
-	// {
-	// 	if (node->left_)
-	// 		return (_tree_max(node->left_));
-	// 	node_type_pointer temp;
-	// 	// do
-	// 	// {
-	// 	// 	temp = node;
-	// 	// 	node = node->parent_;
-	// 	// } while (node && temp == node->left_);
-	// 	// return (node);
-	// 	while (temp && temp->left_ == node)
-	// 	{
-	// 		node = temp;
-	// 		temp = temp->parent_;
-	// 	}
-	// 	if (temp == NULL)
-	// 		return (node);
-	// 	return (temp);
-	// };
-
-	template<class node_type_pointer>
-	node_type_pointer predecessor(node_type_pointer node)
+	template<class node_type>
+	node_type* predecessor(node_type* node)
 	{
 		if (node->left_)
 			return (_tree_max(node->left_));
 
-		node_type_pointer temp = node->parent_;
+		node_type* temp = node->parent_;
 		while (temp && temp->left_ == node)
 		{
 			node = temp;
@@ -532,27 +508,5 @@ namespace ft
 			// return (node);
 		return (temp);
 	};
-
-//cchu
-		// _Self &operator--()
-		// {
-		// 	if (_n->left)
-		// 	{
-		// 		_n = _n->left;
-		// 		while (_n && _n->right)
-		// 			_n = _n->right;
-		// 	}
-		// 	else
-		// 	{
-		// 		_node *tmp;
-		// 		do
-		// 		{
-		// 			tmp = _n;
-		// 			_n = _n->parent;
-		// 		} while (_n && tmp == _n->left);
-		// 	}
-		// 	return *this;
-		// }
-
 }
 #endif
