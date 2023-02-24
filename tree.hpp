@@ -55,8 +55,8 @@ namespace ft
 		typedef typename value_type::first_type						key_type;
 		typedef typename value_type::second_type					mapped_type;
 		typedef ft::map_iterator<pointer, node_type>				iterator;
-		typedef ft::map_iterator<const_pointer, node_type>			const_iterator;
-		// typedef ft::map_const_iterator<const_pointer, node_type>			const_iterator;
+		// typedef ft::map_iterator<const_pointer, node_type>			const_iterator;
+		typedef ft::map_const_iterator<const_pointer, node_type>			const_iterator;
 		typedef ft::reverse_iterator<iterator>						reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator>				const_reverse_iterator;
 
