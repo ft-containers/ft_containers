@@ -50,6 +50,6 @@ namespace ft
 		typedef Ty& reference;
 	};
 
-};
+}
 
 #endif

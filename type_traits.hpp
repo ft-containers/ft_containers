@@ -70,8 +70,8 @@ namespace ft
 	struct is_integral_type<int> : public true_type {};	
 	template <>
 	struct is_integral_type<long int> : public true_type {};	
-	template <>
-	struct is_integral_type<long long int> : public true_type {};	
+	// template <>
+	// struct is_integral_type<long long int> : public true_type {};	
 	template <>
 	struct is_integral_type<unsigned char> : public true_type {};	
 	template <>
@@ -80,8 +80,8 @@ namespace ft
 	struct is_integral_type<unsigned int> : public true_type {};
 	template <>
 	struct is_integral_type<unsigned long int> : public true_type {};
-	template <>
-	struct is_integral_type<unsigned long long int> : public true_type {};
+	// template <>
+	// struct is_integral_type<unsigned long long int> : public true_type {};
 	
 	// is_integral
 	template <typename Tp>
@@ -188,6 +188,6 @@ namespace ft
 		: public integral_constant<bool,
 								is_same<typename is_iterator<Iter>::category,
 									random_access_iterator_tag>::value> {};
-};
+}
 
 #endif

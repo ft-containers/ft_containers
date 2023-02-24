@@ -1,5 +1,7 @@
-#include "../system/system_methods.ipp"
-#include "__service.ipp"
+#include "../ft_containers-unit/sources/system/system_methods.ipp"
+#include "../ft_containers-unit/sources/vector_tests/__service.ipp"
+// #define VECTOR			"../vector.hpp"
+#include <iostream>
 
 class B {
 public:
@@ -34,10 +36,10 @@ template <typename T>
 std::vector<int> insert_test_3(std::vector<T> vector) {
     std::vector<int> v;
     std::vector<int> tmp;
-    tmp.assign(2600 * _ratio, 1);
-    vector.assign(4200 * _ratio, 1);
+    tmp.assign(26 , 2);
+	vector.assign(42 , 1);
     g_start1 = timer();
-    vector.insert(vector.end() - 1000 * _ratio, tmp.begin(), tmp.end());
+    vector.insert(vector.end() - 10 , tmp.begin(), tmp.end());
     g_end1 = timer();
     v.push_back(vector[3]);
     v.push_back(vector.size());
@@ -55,7 +57,9 @@ std::vector<int> insert_test_3(std::vector<T> vector) {
     try { vv.insert(vv.begin(), v1.begin(), v1.end()); }
     catch (...) {
         v.push_back(vv.size());
-        // v.push_back(vv.capacity());
+        v.push_back(vv.capacity());
+        std::cout << "size: " <<vv.size() << std::endl;
+        std::cout << "capacity: " <<vv.capacity() << std::endl;
     }
 
     return v;
@@ -65,14 +69,14 @@ template <typename T>
 std::vector<int> insert_test_3(_vector<T> vector) {
     std::vector<int> v;
     _vector<int> tmp;
-    tmp.assign(2600 * _ratio, 1);
-    vector.assign(4200 * _ratio, 1);
+    tmp.assign(26 , 2);
+    vector.assign(42 , 1);
     g_start2 = timer();
-    vector.insert(vector.end() - 1000 * _ratio, tmp.begin(), tmp.end());
+    vector.insert(vector.end() - 10 , tmp.begin(), tmp.end());
     g_end2 = timer();
     v.push_back(vector[3]);
-    v.push_back(vector.size());
-    v.push_back(vector.capacity());
+    v.push_back(vector.size());    
+	v.push_back(vector.capacity());
 
     std::unique_ptr<B> k2(new B(3));
     std::unique_ptr<B> k3(new B(4));
@@ -83,10 +87,13 @@ std::vector<int> insert_test_3(_vector<T> vector) {
     v1.push_back(&(*k2));
     v1.push_back(&(*k3));
     v1.push_back(&(*k4));
+    // vv.insert(vv.begin(), v1.begin(), v1.end());
     try { vv.insert(vv.begin(), v1.begin(), v1.end()); }
     catch (...) {
         v.push_back(vv.size());
-        // v.push_back(vv.capacity());
+        v.push_back(vv.capacity());
+        std::cout << "size: " <<vv.size() << std::endl;
+        std::cout << "capacity: " <<vv.capacity() << std::endl;
     }
 
     return v;

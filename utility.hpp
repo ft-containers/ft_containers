@@ -112,6 +112,6 @@ namespace ft
 	distance(InputIter first, InputIter last)
 	{ return ft::__distance(first, last, typename iterator_traits<InputIter>::iterator_category()); }
 
-};
+}
 
 #endif

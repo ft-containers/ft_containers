@@ -50,6 +50,6 @@ namespace ft
 											__less<typename ft::iterator_traits<InputIterator1>::value_type,
 													typename ft::iterator_traits<InputIterator2>::value_type>());
 	}
-};
+}
 
 #endif

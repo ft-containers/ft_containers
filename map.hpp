@@ -214,32 +214,32 @@ namespace ft
 	// relational operators
 	template <typename Key, typename T, typename Compare, typename Alloc>
 	bool operator== (const map<Key,T,Compare,Alloc>& x, const map<Key,T,Compare,Alloc>& y)
-	{ return ((x.size() == y.size()) && ft::equal(x.begin(), x.end(), y.begin()));};
+	{ return ((x.size() == y.size()) && ft::equal(x.begin(), x.end(), y.begin()));}
 	
 	template <typename Key, typename T, typename Compare, typename Alloc>
 	bool operator!= (const map<Key,T,Compare,Alloc>& x, const map<Key,T,Compare,Alloc>& y)
-	{ return (!(x == y));};
+	{ return (!(x == y));}
 	
 	template <typename Key, typename T, typename Compare, typename Alloc>
 	bool operator<  (const map<Key,T,Compare,Alloc>& x, const map<Key,T,Compare,Alloc>& y)
-	{ return (ft::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end()));};
+	{ return (ft::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end()));}
 	
 	template <typename Key, typename T, typename Compare, typename Alloc>
 	bool operator<= (const map<Key,T,Compare,Alloc>& x, const map<Key,T,Compare,Alloc>& y)
-	{ return (!(y < x));};
+	{ return (!(y < x));}
 	
 	template <typename Key, typename T, typename Compare, typename Alloc>
 	bool operator>  (const map<Key,T,Compare,Alloc>& x, const map<Key,T,Compare,Alloc>& y)
-	{ return (ft::lexicographical_compare(y.begin(), y.end(), x.begin(), x.end()));};
+	{ return (ft::lexicographical_compare(y.begin(), y.end(), x.begin(), x.end()));}
 	
 	template <typename Key, typename T, typename Compare, typename Alloc>
 	bool operator>= (const map<Key,T,Compare,Alloc>& x, const map<Key,T,Compare,Alloc>& y)
-	{ return (!(x < y));};
+	{ return (!(x < y));}
 
 	// swap
 	template <typename Key, typename T, typename Compare, typename Alloc>
-	void swap (map<Key,T,Compare,Alloc>& x, map<Key,T,Compare,Alloc>& y) { x.swap(y); };
+	void swap (map<Key,T,Compare,Alloc>& x, map<Key,T,Compare,Alloc>& y) { x.swap(y); }
 
-};
+}
 
 #endif

@@ -465,7 +465,7 @@ namespace ft
 		while (temp->left_ != NULL)
 			temp = temp->left_;
 		return (temp);
-	};
+	}
 
 	template<typename node_type>
 	node_type* _tree_max(node_type* temp)
@@ -475,7 +475,7 @@ namespace ft
 			temp = temp->right_;
 		}
 		return (temp);
-	};
+	}
 
 	template<class node_type>
 	node_type* successor(node_type* node)
@@ -490,7 +490,7 @@ namespace ft
 			temp = temp->parent_;
 		}
 		return (temp);
-	};
+	}
 
 	template<class node_type>
 	node_type* predecessor(node_type* node)
@@ -507,6 +507,6 @@ namespace ft
 		// if (temp == NULL)
 			// return (node);
 		return (temp);
-	};
+	}
 }
 #endif

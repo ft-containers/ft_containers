@@ -605,6 +605,11 @@ namespace ft
 		&& !is_forward_iterator<InputIterator>::value, void>::type
 	vector<Tp, Allocator>::insert(iterator position, InputIterator first, InputIterator last)
 	{
+		//-----------
+		// vector<Tp, Allocator>	temp(2);
+		// temp.push_back(*first);
+		// temp.push_back(*last);
+		//-----------
 		difference_type diff = position - begin();
 		pointer p = this->begin_ + diff;
 		pointer prev_end_ = this->end_;
@@ -617,6 +622,12 @@ namespace ft
 	typename enable_if <is_forward_iterator<ForwardIterator>::value, void>::type
 	vector<Tp, Allocator>::insert(iterator position, ForwardIterator first, ForwardIterator last)
 	{
+		// vector<Tp, Allocator>	temp(2);
+		// // temp.insert(position, last - first, *first);
+		// // temp.alloc().allocate(1);
+		// // temp.alloc().construct(temp.begin(), *first);
+		// std::uninitialized_copy(first, first++, temp.begin());
+		//
 		difference_type in_size = ft::distance(first, last);
 		difference_type diff = position - begin();
 		if (in_size <= 0) 
@@ -766,5 +777,6 @@ namespace ft
 	bool operator>=(const vector<Tp, Allocator>& x, const vector<Tp, Allocator>& y)
 	{ return !(x < y); }
 
-};
+}
+
 #endif

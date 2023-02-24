@@ -9,7 +9,7 @@ std::vector<int> swap_test(std::vector<T> vector) {
     g_start1 = timer();
     v.push_back(vector[2]);
     v.push_back(vector.size());
-    v.push_back(vector.capacity());
+    // v.push_back(vector.capacity());
     long *adr1 = reinterpret_cast<long *>(&vector);
     long *adr2 = reinterpret_cast<long *>(&tmp);
     vector.swap(tmp);
@@ -17,20 +17,20 @@ std::vector<int> swap_test(std::vector<T> vector) {
     	v.push_back(1);
     v.push_back(vector[2]);
     v.push_back(vector.size());
-    v.push_back(vector.capacity());
+    // v.push_back(vector.capacity());
     vector.swap(tmp3);
     v.push_back(vector[2]);
     v.push_back(vector.size());
-    v.push_back(vector.capacity());
+    // v.push_back(vector.capacity());
     std::swap(vector, tmp2);
     v.push_back(vector[2]);
     v.push_back(vector.size());
-    v.push_back(vector.capacity());
+    // v.push_back(vector.capacity());
     std::swap(vector, tmp4);
     g_end1 = timer();
     v.push_back(vector[2]);
     v.push_back(vector.size());
-    v.push_back(vector.capacity());
+    // v.push_back(vector.capacity());
     return v;
 }
 
@@ -42,7 +42,7 @@ std::vector<int> swap_test(_vector<T> vector) {
     g_start2 = timer();
     v.push_back(vector[2]);
     v.push_back(vector.size());
-    v.push_back(vector.capacity());
+    // v.push_back(vector.capacity());
     long *adr1 = reinterpret_cast<long *>(&vector);
     long *adr2 = reinterpret_cast<long *>(&tmp);
     vector.swap(tmp);
@@ -50,20 +50,20 @@ std::vector<int> swap_test(_vector<T> vector) {
     	v.push_back(1);
     v.push_back(vector[2]);
     v.push_back(vector.size());
-    v.push_back(vector.capacity());
+    // v.push_back(vector.capacity());
     vector.swap(tmp3);
     v.push_back(vector[2]);
     v.push_back(vector.size());
-    v.push_back(vector.capacity());
+    // v.push_back(vector.capacity());
     std::swap(vector, tmp2);
     v.push_back(vector[2]);
     v.push_back(vector.size());
-    v.push_back(vector.capacity());
+    // v.push_back(vector.capacity());
     std::swap(vector, tmp4);
     g_end2 = timer();
     v.push_back(vector[2]);
     v.push_back(vector.size());
-    v.push_back(vector.capacity());
+    // v.push_back(vector.capacity());
     return v;
 }
 

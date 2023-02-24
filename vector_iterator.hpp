@@ -91,6 +91,6 @@ namespace ft
 	operator+(typename vector_iterator<Iter>::difference_type n,
 			vector_iterator<Iter> x) throw()
 	{ x += n; return x; }
-};
+}
 
 #endif
