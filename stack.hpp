@@ -18,19 +18,19 @@ namespace ft
 		typedef typename container_type::size_type			size_type;
 
 	protected:
-		container_type c_;
+		container_type c;
 
 	public:
 		//constructor
-		explicit stack(const container_type& c = container_type()) : c_(c) {}
+		explicit stack(const container_type& c = container_type()) : c(c) {}
 
 		//member functions
-		bool empty() const { return c_.empty(); }
-		size_type size() const { return c_.size(); }
-		value_type& top() { return c_.back(); }
-		const value_type& top() const { std::cout << "const called!"<< std::endl; return c_.back(); }
-		void push(const value_type& v) { c_.push_back(v); }
-		void pop() { c_.pop_back(); }
+		bool empty() const { return c.empty(); }
+		size_type size() const { return c.size(); }
+		value_type& top() { return c.back(); }
+		const value_type& top() const { std::cout << "const called!"<< std::endl; return c.back(); }
+		void push(const value_type& v) { c.push_back(v); }
+		void pop() { c.pop_back(); }
 
 
 		template <class T, class C>
@@ -42,11 +42,11 @@ namespace ft
 
 	template <class Tp, class Container>
 	bool operator==(const stack<Tp, Container>& x, const stack<Tp, Container>& y)
-	{ return x.c_ == y.c_; }
+	{ return x.c == y.c; }
 
 	template <class Tp, class Container>
 	bool operator< (const stack<Tp, Container>& x, const stack<Tp, Container>& y)
-	{ return x.c_ < y.c_; }
+	{ return x.c < y.c; }
 
 	template <class Tp, class Container>
 	bool operator!=(const stack<Tp, Container>& x, const stack<Tp, Container>& y)

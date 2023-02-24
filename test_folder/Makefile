@@ -1,12 +1,9 @@
 NAME = TEST
 
-CXX = c++ -g3 #-fsanitize=address
-# CXXFLAGS = -Wall -Wextra -Werror -g3
-# -std=c++98 -pedantic
+CXX = c++
+CXXFLAGS = -Wall -Wextra -Werror -g3 -std=c++98 -pedantic
 
-SRCS = vector_unit_test.cpp
-#		enable_if.cpp 
-		
+SRCS = subject_test.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 %.o : %.cpp

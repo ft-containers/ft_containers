@@ -50,6 +50,17 @@ namespace ft
 		typedef Ty& reference;
 	};
 
+	template <typename Ty>
+	struct iterator_traits<const Ty*>
+	{
+		typedef random_access_iterator_tag iterator_category;
+		typedef Ty value_type;
+		typedef ptrdiff_t difference_type;
+		typedef ptrdiff_t distance_type;
+		typedef const Ty* pointer;
+		typedef const Ty& reference;
+	};
+
 }
 
 #endif

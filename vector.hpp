@@ -283,6 +283,13 @@ namespace ft
 			// 	ConstructTransaction(ConstructTransaction const&) = delete; //아예 사용도 못하게
 			// 	ConstructTransaction& operator=(ConstructTransaction const&) = delete;
 		};
+	
+		template <class _Iter, class _Ptr>
+		static	void __construct_range_forward(allocator_type& __a, _Iter __begin1, _Iter __end1, _Ptr& __begin2)
+		{
+			for (; __begin1 != __end1; ++__begin1, (void) ++__begin2)
+				__a.construct(__begin2, *__begin1);
+		}
 	};
 
 	// constructor
@@ -472,7 +479,8 @@ namespace ft
 		vector<Tp, Allocator>::__construct_at_end(ForwardIterator first, ForwardIterator last, size_type n)
 	{
 		ConstructTransaction tx(*this, n);
-		std::__construct_range_forward(this->alloc(), first, last, tx.pos_);
+		__construct_range_forward(this->alloc(), first, last, tx.pos_);
+		// std::__construct_range_forward(this->alloc(), first, last, tx.pos_);
 		//can not compile in cluster Mac!! Check it!!!-----------------------------------------------------
 	}
 
