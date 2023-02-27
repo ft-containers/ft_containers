@@ -7,7 +7,7 @@
 // #include <iterator>
 #include <memory>
 // #include <utility>
-#include <functional> //less
+#include <functional>
 #include "algorithm.hpp"
 #include "utility.hpp"
 #include "tree.hpp"
