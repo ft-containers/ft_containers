@@ -26,7 +26,7 @@ namespace ft
 			: i(u.base()) {}
 		vector_iterator(iterator_type x) : i(x) {}
 
-		iterator_type		 base() const { return i; }
+		iterator_type		base() const { return i; }
 
 		reference			operator* () const { return *i; }
 		pointer				operator->() const { return i; }

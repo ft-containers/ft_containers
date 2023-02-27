@@ -1,16 +1,15 @@
 #include <iostream>
 #include <string>
 #include <deque>
-// #if 1 //CREATE A REAL STL EXAMPLE
-	#include <map>
-	#include <stack>
-	#include <vector>
-	// namespace ft = std;
-// #else
-	#include "../map.hpp"
-	#include "../stack.hpp"
-	#include "../vector.hpp"
-// #endif
+
+// for std
+#include <map>
+#include <stack>
+#include <vector>
+// for ft
+#include "../map.hpp"
+#include "../stack.hpp"
+#include "../vector.hpp"
 
 #include <stdlib.h>
 #include <sys/time.h>
@@ -134,14 +133,6 @@ int main(int argc, char** argv)
 		ft_time = diff = end - start;
 		std::cout << "\nspend time (ft) : " << diff << std::endl;
 		std::cout << "===========================================" << std::endl;
-		//
-		// diff = end - start;
-		// diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
-
-		// ualarm(diff * 1e3, 0);
-		// for (ft::map<int, std::string>::iterator it = ft_m.begin(); it != ft_m.end(); ++it)
-		// 	;
-		// ualarm(0, 0);
 	
 	}
 
